@@ -17,7 +17,7 @@ const MyOrders = ({navigation, profile}) => {
                 per_page : 10
             })
             .then((response) => {
-                console.log(response)
+                console.log(response[0])
                 setOrders(response)
                 setLoading(false)
             })
