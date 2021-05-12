@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "852965090320",
+    "project_id": "dropmart-21e08",
+    "storage_bucket": "dropmart-21e08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852965090320:android:89c24e88668644528e5695",
+        "android_client_info": {
+          "package_name": "com.upgrate.dropmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852965090320-a23ntcmsad4rpb5lkc7rfl2ki6j6838h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEa-U4bUWswDclaXMHQNkILig9QxZXOzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852965090320-a23ntcmsad4rpb5lkc7rfl2ki6j6838h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
