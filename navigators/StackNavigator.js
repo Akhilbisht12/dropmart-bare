@@ -25,6 +25,7 @@ import Details from "../Screens/OnBoardingScreens/Details";
 import Axios from 'axios'
 import Wishlist from "../Screens/Wishlist";
 import BankDetails from "../Screens/MyAccount/BankDetails";
+import PhoneAuth from "../Screens/Auth/PhoneAuth";
 
 const data = {
   screenOne : {
@@ -90,7 +91,7 @@ const StackNavigator = ({profile, shipping, wishlist}) => {
 // if(loading) return<ActivityIndicator/>
 // else{
     return (
-      <Stack.Navigator initialRouteName={profile.email?'Home':'Login'} headerMode='none'>
+      <Stack.Navigator initialRouteName={profile.email?'PhoneAuth':'Login'} headerMode='none'>
         <Stack.Screen name='ScreenOne' component={ScreenOne}/>
         <Stack.Screen name='ScreenTwo' component={ScreenTwo}/>
         <Stack.Screen name='ScreenThree' component={ScreenThree}/>
@@ -112,6 +113,7 @@ const StackNavigator = ({profile, shipping, wishlist}) => {
         <Stack.Screen name="Wishlist" component={Wishlist} />
         <Stack.Screen name="Earnings" component={Earnings} />
         <Stack.Screen name="BankDetails" component={BankDetails} />
+        <Stack.Screen name="PhoneAuth" component={PhoneAuth} />
       </Stack.Navigator>
     )
   }
