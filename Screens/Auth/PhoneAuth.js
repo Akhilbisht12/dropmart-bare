@@ -22,6 +22,7 @@ const PhoneAuth = ({navigation}) => {
         console.log(code)
       try {
         await confirm.confirm(code);
+        navigation.navigate('Home')
       } catch (error) {
         alert('Invalid code.');
       }
