@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Dimensions, Linking } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useSafeArea } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import WooCommerce from '../../Components/WooCommerce';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../Components/Loader'
 import { connect } from 'react-redux';
-import { addUser } from '../../Redux/User/User-Action';
+import { addBilling, addUser } from '../../Redux/User/User-Action';
 import Axios from 'axios';
 
-const Login = ({navigation,addUser}) => {
+const Login = ({navigation,addUser, addBilling}) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [loading, setLoading] =useState(false)
@@ -61,17 +61,13 @@ const Login = ({navigation,addUser}) => {
                     console.log(wooresponse)
                     addUser({
                         id: wooresponse[0].id,
-                        date_created: '',
-                        date_created_gmt: '',
-                        date_modified: '',
-                        date_modified_gmt: '',
                         email: email,
                         first_name: wooresponse[0].billing.first_name,
                         last_name: wooresponse[0].billing.last_name,
-                        role: '',
                         token : response.data.token,
                         username: email,
                       })
+                    addBilling(wooresponse[0].billing)
                 })
                 .catch((error) => {
                     console.log(error.response);
@@ -93,25 +89,30 @@ const Login = ({navigation,addUser}) => {
         return (
             <View style={styles.main}>
                 <View style={{alignItems :'center'}}>
-                    <Icon name='opencart' color={'#62BA03'} size={50}/>
+                    <Ionicons name='book' color={'#c60607'} size={50}/>
                     <Text style={styles.headText}>Welcome Back</Text>
                     <Text>Sign in to continue</Text>
                 </View>
                 <View>
                     <TextInput value={email} onChangeText={(text)=>setEmail(text)} placeholder='Email' placeholderTextColor='grey' style={styles.input}/>
                     <TextInput value={password} onChangeText={(text)=>setPassword(text)} placeholder='Password' placeholderTextColor='grey' style={styles.input}/>
-                    <TouchableOpacity onPress={()=>Linking.openURL('https://gms.upgrate.in/my-account/lost-password/')}>
-                        <Text style={{textAlign : 'right', color : '#62BA03'}}>Forgot Password</Text>
+                    <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')}>
+                        <Text style={{textAlign : 'right', color : '#c60607'}}>Forgot Password</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-                        <Text style={{color : 'white', textAlign :'center'}}>Sign In</Text>
-                    </TouchableOpacity>
+                    <View>
+                        <TouchableOpacity style={[styles.btn,{backgroundColor : '#c60607'}]} onPress={handleLogin}>
+                            <Text style={{color : 'white', textAlign :'center'}}>Sign In</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.btn,{borderWidth : 1, borderColor : '#c60607'}]} onPress={()=>navigation.navigate('PhoneAuth')}>
+                            <Text style={{color : '#c60607', textAlign :'center'}}>Login With Phone Number</Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={{flexDirection : 'row', justifyContent : 'center', marginTop : 10}}>
                         <Text>Don't have an account?</Text>
                         <TouchableOpacity onPress={()=>navigation.navigate('Signup')}>
-                            <Text style={{color : '#62BA03'}}>Sign Up</Text>
+                            <Text style={{color : '#c60607'}}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -140,16 +141,17 @@ const styles = StyleSheet.create({
         borderRadius : 5
     },
     btn : {
-        backgroundColor : '#62BA03',
         width : Dimensions.get('window').width - 50,
         paddingVertical : 10,
-        borderRadius : 5
+        borderRadius : 5,
+        marginVertical : 5
     }
 })
 
 const mapDispatchToProps = (dispatch) =>{
     return {
-        addUser : (user)=>dispatch(addUser(user))
+        addUser : (user)=>dispatch(addUser(user)),
+        addBilling : (user) => dispatch(addBilling(user))
     }
 }
 

@@ -72,7 +72,7 @@ export default function CatProducts({route}) {
     else{
         return (
             <View style={{flex : 1}}>
-                <TitleHeader title={item.name} parent='Home'/>
+                <TitleHeader title={item.name} parent='Category'/>
                 <FlatList
                 data={products}
                 renderItem={({item,index})=>renderItem(item,index)}

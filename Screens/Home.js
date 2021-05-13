@@ -15,11 +15,11 @@ export default function Home() {
     const navigation = useNavigation();
     const cart = [];
             return(
-                <SafeAreaView>
+                <SafeAreaView style={styles.main}>
                     <Header/>
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
                 <CategoryCircle/>
-                <FlatCarousel/>
+                <FlatCarousel start={0} height={200}/>
                 {/* <View style={styles.cat}>
                     <CategoryComp/>
                 </View>
@@ -30,7 +30,9 @@ export default function Home() {
                     <Brands/>
                 </View> */}
                 <CategoryBooks id={38} name='Book Combos'/>
+                <FlatCarousel start={2} height={150}/>
                 <CategoryBooks id={73} name='Fiction Books'/>
+                <FlatCarousel start={2} height={150}/>
                 <CategoryBooks id={74} name='Non Fiction Books'/>
 
                 </ScrollView>
@@ -39,13 +41,10 @@ export default function Home() {
 
 const styles= StyleSheet.create({
     scroll : {
-        backgroundColor : 'white'
+        backgroundColor : 'white',
     },
     main : {
         flex : 1,
-        justifyContent : 'center',
-        width : Dimensions.get('window').width
-
     },
     productGrid : {
         width : Dimensions.get('window').width,

@@ -74,7 +74,7 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
          borderWidth : 1,
         },
         offer : {
-         backgroundColor : '#62BA03',
+         backgroundColor : 'green',
          width : 60,
          paddingVertical : 2,
          paddingHorizontal : 5,

@@ -21,6 +21,7 @@ const BankDetails = ({profile, navigation}) => {
             }
         })
         .then(response=>{
+            console.log(response)
             if(response.data.ifsc===''){
                 setEdit(true);
             }else{

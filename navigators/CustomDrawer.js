@@ -82,7 +82,7 @@ const CustomDrawer = (props,deleteUser) => {
                     </View>
                     <View style={{alignItems : 'center', backgroundColor : '#c60607', paddingVertical : 5}}>
                         <TouchableOpacity style={{flexDirection : 'row'}} onPress={()=>Linking.openURL('https://www.upgrate.in/')}>
-                            <Text style={{color : 'white'}}>Developed With Love By</Text>
+                            <Text style={{color : 'white'}}>Developed By</Text>
                             <Text style={{color : 'white', fontWeight : 'bold'}}> Upgrate.in</Text>
                         </TouchableOpacity>
                     </View>

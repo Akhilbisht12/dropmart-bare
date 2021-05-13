@@ -6,6 +6,7 @@ import Loader from '../Components/Loader';
 import ProductComp from '../Components/ProductComp'
 import TitleHeader from '../Components/TitleHeader';
 import WooCommerce from '../Components/WooCommerce';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export default function Search({navigation}) {
     const [search, setSearch] =  useState()
@@ -39,8 +40,8 @@ export default function Search({navigation}) {
                     </TouchableOpacity>
                 </View>
                 <View style={{flex : 1,justifyContent : 'center', alignItems : 'center'}}>
-                    <Image source={require('../Screens/OnBoardingScreens/onbTwo.png')}/>
-                    <Text style={{fontSize : 30, color : "#62BA03"}}>Find Grocery For Your Home</Text>
+                    <Ionicons name='book' size={100} color='#c60607'/>
+                    <Text style={{fontSize : 30, color : "#c60607"}}>Find Books Of Your Choice</Text>
                 </View>
             </View>
         )
@@ -61,7 +62,13 @@ export default function Search({navigation}) {
                         </TouchableOpacity>
                     </View>
                 </View> */}
-                <TitleHeader title='Search Product'/>
+                <TitleHeader title='Search Product' parent='Home'/>
+                <View style={styles.search}>
+                    <TextInput style={{height : 40,width : Dimensions.get('window').width-100}} value={search} onChangeText={(text)=>setSearch(text)}/>
+                    <TouchableOpacity onPress={handleSearch}>
+                        <Icon style={styles.icon} name='search' color='white' size={20}/>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView style={{marginBottom : StatusBar.currentHeight*3}}>
                     <View style={{flexWrap : 'wrap', justifyContent : 'center', flexDirection : 'row'}}>
                         {products.map((item)=>{
@@ -83,7 +90,7 @@ export default function Search({navigation}) {
                     </TouchableOpacity>
                 </View>
                 <View style={{flex : 1,justifyContent : 'center', alignItems : 'center'}}>
-                    <Image source={require('../Screens/OnBoardingScreens/onbTwo.png')}/>
+                    <Ionicons name='book' size={100} color='#c60607'/>
                     <Text style={{fontSize : 30, color : "red"}}>No Products Found</Text>
                 </View>
             </View>
@@ -99,11 +106,11 @@ const styles = StyleSheet.create({
         borderWidth : 1,
         margin : 10,
         borderRadius : 5,
-        borderColor : '#62BA03',
+        borderColor : '#c60607',
         paddingHorizontal : 5
     },
     icon : {
-        backgroundColor : '#60BA03',
+        backgroundColor : '#c60607',
         paddingHorizontal : 10,
         paddingVertical : 5,
         borderRadius : 5

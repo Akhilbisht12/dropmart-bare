@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dimensions, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import WooCommerce from '../../Components/WooCommerce';
 import Loader from '../../Components/Loader';
@@ -82,22 +82,24 @@ import { addUser } from '../../Redux/User/User-Action';
             .then(response=>{
                 WooCommerce.get("customers",{email})
                 .then((wooresponse) => {
-                    addUser({
-                        id: wooresponse[0].id,
-                        date_created: '',
-                        date_created_gmt: '',
-                        date_modified: '',
-                        date_modified_gmt: '',
-                        email: email,
-                        first_name: '',
-                        last_name: '',
-                        role: '',
-                        token : '',
-                        username: email,
-                      })
+                    Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
+                        username : email,
+                        password : password
+                    })
+                    .then(response=>{
+                        addUser({
+                            id: wooresponse[0].id,
+                            email: email,
+                            first_name: '',
+                            last_name: '',
+                            token : response.data.token,
+                            username: email,
+                          })
+                    })
+                    
                 })
                 .catch((error) => {
-                    console.log(error.response);
+                    alert(error);
                 });
             })
             .catch(err=>{
@@ -118,23 +120,28 @@ import { addUser } from '../../Redux/User/User-Action';
         return(
             <View style={styles.main}>
                 <View style={{alignItems : 'center'}}>
-                    <Icon name='opencart' color={'#62BA03'} size={50}/>
+                    <Ionicons name='book' color={'#c60607'} size={50}/>
                     <Text style={{fontSize : 40}}>Welcome</Text>
                     <Text>Sign Up to continue</Text>
                 </View>
                 <View>
-                    <TextInput style={styles.input} placeholder='Your Email' placeholderTextColor={'grey'} value={email} 
+                    <TextInput style={styles.input} placeholder='Enter Email' placeholderTextColor={'grey'} value={email} 
                     onChangeText={(text)=>setEmail(text)}/>
 
                     <TextInput placeholderTextColor={'grey'} style={styles.input} placeholder='Enter Password'
                     value={password} onChangeText={(text)=>setPassword(text)}/>
                 </View>
-                <TouchableOpacity style={styles.btn} onPress={()=>{handleSignUp()}}>
-                    <Text style={{color : 'white'}}>Sign Up</Text>
-                </TouchableOpacity>
+                <View>
+                    <TouchableOpacity style={[styles.btn,{backgroundColor : '#c60607'}]} onPress={()=>{handleSignUp()}}>
+                        <Text style={{color : 'white'}}>Sign Up</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.btn,{borderWidth : 1, borderColor : '#c60607'}]} onPress={()=>navigation.navigate('PhoneAuth')}>
+                        <Text style={{color : '#c60607'}}>Login in with Phone Number</Text>
+                    </TouchableOpacity>
+                </View>
                 <TouchableOpacity style={{flexDirection : 'row'}} onPress={()=>navigation.navigate('Login')}>
                     <Text>Already have a account?</Text>
-                    <Text style={{color : '#62BA03', fontWeight : 'bold'}}> Sign In</Text>
+                    <Text style={{color : '#c60607', fontWeight : 'bold'}}> Sign In</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -181,17 +188,12 @@ import { addUser } from '../../Redux/User/User-Action';
          borderRadius : 5
      },
      btn : {
-         backgroundColor : '#62BA03',
          paddingHorizontal : 50,
          paddingVertical : 10,
          borderRadius : 10,
-         borderBottomWidth : 2,
-         borderTopWidth : 0.5,
-         borderLeftWidth : 1,
-         borderRightWidth : 1,
-         borderColor : '#428000',
          width : Dimensions.get('window').width -50,
-         alignItems :'center'
+         alignItems :'center',
+         marginVertical : 5
      },
      pad : {
          margin : 5,

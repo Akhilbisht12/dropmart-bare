@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, ScrollView, Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Ionicons'
 import TitleHeader from '../../Components/TitleHeader'
 import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux'
 
 const List = ({name, title, navigate}) => {
     const navigation = useNavigation()
@@ -18,7 +19,7 @@ const List = ({name, title, navigate}) => {
     )
 }
 
-export default function Account() {
+const Account = ({profile}) => {
     const navigation = useNavigation()
     return (
         <View style={styles.main}>
@@ -28,8 +29,8 @@ export default function Account() {
                     <TouchableOpacity>
                         <View style={styles.flexBetween}>
                             <View style={styles.flexBetween}>
-                                <Image style={styles.userImage} source={{uri : 'https://www.tidio.com/wp-content/themes/tidio-wptheme/assets/product-pages/lp-chatbots/jano@2x.png'}}/>
-                                <Text style={styles.username}>Username</Text>
+                                <Image style={styles.userImage} source={{uri : 'https://secure.gravatar.com/avatar/922cd3807dcf9d327d6d602434b6ddf0?s=96&d=mm&r=g'}}/>
+                                <Text style={styles.username}>{profile.email}</Text>
                             </View>
                             <View>
                                 <Icon name='chevron-forward' size={30}/>
@@ -48,8 +49,13 @@ export default function Account() {
                         </View>
                     </TouchableOpacity>
                     <List name='cash' title='Bank Details' navigate='BankDetails'/>
-                    <List name='information-circle' title='Help & FAQ' navigate='Cart'/>
-                    <List name='settings' title='Settings' navigate='Cart'/>
+                    <TouchableOpacity onPress={()=>Linking.openURL('https://www.elocalshops.com/pages/easy-faqs')}>
+                        <View style={styles.listMain}>
+                            <Icon name='information-circle' color='grey' size={30}/>
+                            <Text style={styles.listTitle}>Help & FAQ</Text>
+                        </View>
+                    </TouchableOpacity>                    
+                    {/* <List name='settings' title='Settings' navigate='Cart'/> */}
                 </View>
                 <View style={styles.version}>
                     <Image style={styles.userImage} source={require('../../assets/icon.png')}/>
@@ -76,7 +82,8 @@ const styles = StyleSheet.create({
     },
     userImage : {
         width : 50,
-        height : 50
+        height : 50,
+        borderRadius : 25
     },
     username : {
         fontSize : 20,
@@ -101,3 +108,11 @@ const styles = StyleSheet.create({
         marginVertical : 10
     }
 })
+
+const mapStateToProps = (state) => {
+    return {
+        profile : state.user.profile
+    }
+}
+
+export default connect(mapStateToProps)(Account)

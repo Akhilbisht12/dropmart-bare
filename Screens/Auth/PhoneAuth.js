@@ -3,6 +3,7 @@ import { View, TextInput ,Button, Image, ScrollView, Text, TouchableOpacity, Dim
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Loader from '../../Components/Loader';
 
 const {width, height } = Dimensions.get('window')
 const PhoneAuth = ({navigation}) => {
@@ -10,24 +11,28 @@ const PhoneAuth = ({navigation}) => {
     const [confirm, setConfirm] = useState(null);
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
+    const [loading, setLoading] = useState(false);
   
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
-        console.log(phoneNumber)
+      setLoading(true)
+      console.log(phoneNumber)
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
       setConfirm(confirmation);
+      setLoading(false)
     }
   
     async function confirmCode() {
         console.log(code)
       try {
         await confirm.confirm(code);
-        navigation.navigate('Home')
+        navigation.navigate('PhoneToWoo', {phone : phone})
       } catch (error) {
         alert('Invalid code.');
       }
     }
   
+    if(loading) return <Loader/>
     if (!confirm) {
       return (
           <ScrollView style={{flex : 1, backgroundColor : 'white'}}>
@@ -58,7 +63,7 @@ const PhoneAuth = ({navigation}) => {
     return (
       <View style={{flex : 1, backgroundColor : 'white'}}>
           <View style={{flex : 2}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>setConfirm(null)}>
                 <Ionicons name='chevron-back' size={30} />
             </TouchableOpacity>
               <View style={{flex : 2,alignItems : 'center', justifyContent : 'space-evenly'}}>

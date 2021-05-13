@@ -4,9 +4,10 @@ import {FlatListSlider} from 'react-native-flatlist-slider';
 import WooCommerce from '../Components/WooCommerce';
 import HeaderLoader from '../Loaders/HeaderLoader'
 
-const {width, height} = Dimensions.get('window')
+const {width} = Dimensions.get('window')
 
-export default function FlatCarousel() {
+export default function FlatCarousel({height, start}) {
+      const end = start+2
       const [loading, setLoading] = useState(true);
       const [images, setImages] = useState([])
       useEffect(()=>{
@@ -14,17 +15,15 @@ export default function FlatCarousel() {
               parent : 36
           })
           .then((response) => {
+              const data = []
               response.map((item,i)=>{
-                const data = images
                 data.push({
                   id : item.id,
                   url : item.image.src
                 })
-                setImages(data)
                 if(i===response.length-1){
-                  setTimeout(() => {
+                    setImages(data)
                     setLoading(false)
-                  }, 1000);
                 }
               })
           })
@@ -37,10 +36,10 @@ export default function FlatCarousel() {
       else{
         return (
           <FlatListSlider
-            data={images}
+            data={images.slice(start, end)}
             imageKey={'url'}
             timer={5000}
-            height={width*0.6}
+            height={height}
             onPress={()=>{}}
             indicatorActiveWidth={20}
           />

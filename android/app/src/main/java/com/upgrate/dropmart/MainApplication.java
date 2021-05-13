@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.razorpay.rn.RazorpayPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(

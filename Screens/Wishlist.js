@@ -10,23 +10,23 @@ import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 
 const { width, height} = Dimensions.get('window')
-const share = async()=> {
-    const url = await FileSystem.downloadAsync(image , FileSystem.documentDirectory + "tmp.png");
-    console.log(url.uri)
-    var messageText = 'Text that you want to share goes here';
-    const options = {
-       mimeType: 'image/jpeg',
-       dialogTitle: messageText,
-    };
-      try{
-          const shareResponse = await Sharing.shareAsync(url.uri, options);
-      }catch(err){
-          console.log('Error =>', err);
-      }
-  }
 const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
 
     const WishlistComp = ({item}) => {
+        const share = async()=> {
+            const url = await FileSystem.downloadAsync(item.image , FileSystem.documentDirectory + "tmp.png");
+            console.log(url.uri)
+            var messageText = 'Text that you want to share goes here';
+            const options = {
+               mimeType: 'image/jpeg',
+               dialogTitle: messageText,
+            };
+              try{
+                  const shareResponse = await Sharing.shareAsync(url.uri, options);
+              }catch(err){
+                  console.log('Error =>', err);
+              }
+          }
         return(
             <View style={styles.wishlistComp}>
                 <View>
@@ -35,8 +35,8 @@ const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
                 <View>
                     <View style={{flexDirection : 'row', justifyContent : 'space-between', paddingHorizontal : 10, paddingVertical : 5}}>
                         <Text style={{fontSize : 16, color : 'gray'}}>{item.name}</Text>
-                        <TouchableOpacity>
-                            <Ionicons name='heart-outline' size={30} color='#c60607'/>
+                        <TouchableOpacity onPress={()=>removeFromWishlist(item.id)}>
+                            <Ionicons name='heart' size={30} color='#c60607'/>
                         </TouchableOpacity>
                     </View>
                     <View style={{flexDirection : 'row', paddingHorizontal : 10, alignItems : 'center'}}>
@@ -48,13 +48,13 @@ const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
                         <Text style={[styles.bdPrice,{color : 'gray'}]}> FREE Delivery</Text>
                     </View>
                     <View style={styles.bottomView}>
-                        <TouchableOpacity style={[styles.shareBtn,{borderColor : 'green'}]} onPress={()=>share()}>
-                            <Text style={{fontSize : 20, color : 'green'}}>Share</Text>
-                            <Ionicons color='green' style={{marginHorizontal : 5}} size={25} name='logo-whatsapp'/>
+                        <TouchableOpacity style={[styles.shareBtn,{borderColor : 'white', backgroundColor : 'green'}]} onPress={()=>share()}>
+                            <Text style={{fontSize : 20, color : 'white'}}>Share</Text>
+                            <Ionicons color='white' style={{marginHorizontal : 5}} size={25} name='logo-whatsapp'/>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.shareBtn,{backgroundColor : '#c60607', borderColor : '#c60607'}]} onPress={()=>addToCart(item)}>
                             <Text style={{fontSize : 20, color : 'white'}}>Add To Cart</Text>
-                            <Ionicons size={25} color='white' name='cart-outline'/>
+                            <Ionicons style={{marginHorizontal : 5}} size={25} color='white' name='cart-outline'/>
                         </TouchableOpacity>
                     </View>
                 </View>

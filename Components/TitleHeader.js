@@ -2,11 +2,14 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-export default function TitleHeader({title, parent, navigation}) {
+import { useNavigation } from '@react-navigation/native';
+
+export default function TitleHeader({title, parent}) {
+    const navigation = useNavigation();
     return (
         <View style={styles.header}>
             <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate(parent)}>
                     <Ionicon style={styles.icon} name='chevron-back-outline'/>
                 </TouchableOpacity>
                 <Text style={styles.title}>{title}</Text>
@@ -15,7 +18,7 @@ export default function TitleHeader({title, parent, navigation}) {
                 <TouchableOpacity onPress={()=>navigation.navigate('Search')}>
                     <Ionicon style={styles.icon} name='search-outline'/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>navigation.navigate('Search')}>
+                <TouchableOpacity onPress={()=>navigation.navigate('Wishlist')}>
                     <Ionicon style={styles.icon} name='heart-outline'/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>navigation.navigate('Cart')}>

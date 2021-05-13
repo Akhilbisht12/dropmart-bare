@@ -1,14 +1,31 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio'
+import React, {useState, useEffect} from 'react'
+import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
+import Loader from '../../Components/Loader'
 import TitleHeader from '../../Components/TitleHeader'
 import WooCommerce from '../../Components/WooCommerce'
+import Axios from 'axios'
 import { addBilling, addUser, editUser } from '../../Redux/User/User-Action'
 const {width, height} = Dimensions.get('window')
 
-const Details = ({addBilling, navigation,profile}) => {
+
+const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
+    const [step, setStep] = useState(0);
+
+    const FindUser = () => {
+        WooCommerce.get('Customers',{email})
+        .then(response=>{
+            console.log(response)
+            if(response.length!==0){
+                handleSavedUser(response[0])
+            }else{
+                setStep(1)
+            }
+        })
+        .catch(err=>console.log(err))
+    }
+
+    const [loading, setLoading] = useState(false);
     const [first_name, set_first_name] = useState('');
     const [last_name, set_last_name] = useState('');
     const [email, set_Email] = useState('');
@@ -21,6 +38,7 @@ const Details = ({addBilling, navigation,profile}) => {
     const [country, set_country] = useState('');
 
     const handleUserSave = () => {
+        setLoading(true)
         let temp = {
             first_name,
             last_name,
@@ -29,7 +47,7 @@ const Details = ({addBilling, navigation,profile}) => {
             address_1,
             address_2,
             city,
-            pincode,
+            postcode : pincode,
             state,
             country
         }
@@ -37,19 +55,85 @@ const Details = ({addBilling, navigation,profile}) => {
         const data = {
             first_name,
             last_name,
+            email,
+            username : email,
             billing: temp
           };
-          WooCommerce.put(`customers/${profile.id}`, data)
-            .then((response) => {
-              console.log(response);
-              navigation.navigate('Home');
-                alert('Details Saved Successfully')
+        Axios.post('https://dropmarts.com/wp-json/wp/v2/users/register', {
+        username : email,
+        email,
+        password : 'PhoneAuthUser'
+        })
+        .then(responseUP=>{
+            console.log(responseUP)
+            WooCommerce.get("customers",{email})
+            .then((wooresponse) => {
+                Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
+                    username : email,
+                    password : 'PhoneAuthUser'
+                })
+                .then(responseIN=>{
+                    console.log(responseIN)
+                    WooCommerce.put(`customers/${wooresponse[0].id}`, data)
+                    .then(wooresponseEdit=>{
+                        console.log(wooresponseEdit)
+                        addUser({
+                            id: wooresponse[0].id,
+                            email: email,
+                            first_name,
+                            last_name,
+                            token : responseIN.data.token,
+                            username: email,
+                          })
+                          alert('You are logged in successfully')
+                          navigation.navigate('Home')
+                          setLoading(false)
+                    })
+                    
+                })
+                
             })
-            .catch((error) => {
-              console.log(error.response);
-            });
+        })
+        .catch(err=>{
+            alert(err)
+        })
     }
 
+
+    const handleSavedUser = (item) => {
+        Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
+            username : email,
+            password : 'PhoneAuthUser'
+        })
+        .then(responseIN=>{
+            console.log(responseIN)
+            console.log(item)
+            addUser({
+                id: item.id,
+                email: item.email,
+                first_name : item.first_name,
+                last_name : item.last_name,
+                token : responseIN.data.token,
+                username: item.username,
+                })
+            addBilling(item.billing)
+            alert(`Welcome back ${item.first_name} ${item.last_name} !`)
+            navigation.navigate('Home')
+            setLoading(false)
+            })
+    }
+
+    if(loading) return <Loader/>
+    if(step===0){
+        return(
+            <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                <TextInput value={email} onChangeText={set_Email} placeholder='Email Address' style={[styles.input]}/>
+                <TouchableOpacity onPress={()=>{FindUser()}} style={[styles.btn, {backgroundColor : 'red',width : width*0.9}]}>
+                    <Text style={[styles.btnText, {color : 'white'}]}>Continue</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
     return (
         <View style={styles.main}>
             <TitleHeader title='Personal Details'/>
@@ -57,7 +141,6 @@ const Details = ({addBilling, navigation,profile}) => {
                 <View style={styles.scrollView}>
                     <TextInput value={first_name} onChangeText={set_first_name} placeholder='First Name' style={[styles.input]}/>
                     <TextInput value={last_name} onChangeText={set_last_name} placeholder='Last Name' style={[styles.input]}/>
-                    <TextInput value={email} onChangeText={set_Email} placeholder='Email' style={[styles.input]}/>
                     <TextInput value={phone} onChangeText={set_phone} placeholder='Mobile Number' style={[styles.input]}/>
                     <TextInput value={address_1} onChangeText={set_address_1} placeholder='House No' style={[styles.input]}/>
                     <TextInput value={address_2} onChangeText={set_address_2} placeholder='Street / Lane / Locality' style={[styles.input]}/>
@@ -120,7 +203,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        editUser : (user)=>dispatch(editUser(user)),
+        addUser : (user)=>dispatch(addUser(user)),
         addBilling : (billing)=>dispatch(addBilling(billing))
     }
 }
@@ -131,4 +214,4 @@ const mapStateToProps = (state)=> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Details)
+export default connect(mapStateToProps, mapDispatchToProps)(PhoneToWoo)

@@ -10,7 +10,7 @@ const CategoryBooks = ({id,name}) => {
     useEffect(()=>{
         WooCommerce.get("products", {
             category : id,
-            per_page : 4
+            per_page : 6
         })
         .then((response) => {
             // console.log(response);
@@ -28,10 +28,9 @@ const CategoryBooks = ({id,name}) => {
             <Text style={{fontSize : 30}}>{name}</Text>
             <View style={{flexWrap : 'wrap', flexDirection : 'row', justifyContent : 'center'}}>
                 {books.map((item)=>{
-                    if(item){
                         return(item.images.map((image)=>{
                         return(<ProductComp key={item.id} item={item} image={image.src}/>);
-                    }))}
+                    }))
                 })}
             </View>
         </View>

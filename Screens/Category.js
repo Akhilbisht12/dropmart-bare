@@ -18,6 +18,7 @@ const Category = ({navigation}) => {
            per_page : 70
         })
        .then((response)=>{
+        //    console.log(response)
            setCategories(response)
            setLoading(false);
        })
