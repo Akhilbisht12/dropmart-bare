@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Dimensions, ScrollView, SafeAreaView, TouchableOpacity} from 'react-native'
+import {StyleSheet, Dimensions, ScrollView, SafeAreaView} from 'react-native'
 import Header from '../Components/Header';
 import ProductShow from '../Components/ProductShow'
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import FlatCarousel from '../Components/FlatCarousel';
 import Brands from '../Components/Brands'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CategoryBooks from '../Components/CategoryBooks';
+import Featured from '../Components/Featured';
 const { height, width}= Dimensions.get('window')
 
 export default function Home() {
@@ -20,6 +21,9 @@ export default function Home() {
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
                 <CategoryCircle/>
                 <FlatCarousel start={0} height={200}/>
+                <Featured/>
+                <CategoryComp/>
+                <FlatCarousel start={2} height={150}/>
                 {/* <View style={styles.cat}>
                     <CategoryComp/>
                 </View>
@@ -32,8 +36,6 @@ export default function Home() {
                 <CategoryBooks id={38} name='Book Combos'/>
                 <FlatCarousel start={2} height={150}/>
                 <CategoryBooks id={73} name='Fiction Books'/>
-                <FlatCarousel start={2} height={150}/>
-                <CategoryBooks id={74} name='Non Fiction Books'/>
 
                 </ScrollView>
             </SafeAreaView>

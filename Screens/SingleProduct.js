@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Share } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Share, ToastAndroid } from 'react-native'
 import TitleHeader from '../Components/TitleHeader';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Sharing from 'expo-sharing';
@@ -8,11 +8,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import WooCommerce from '../Components/WooCommerce';
 import Loader from '../Components/Loader';
 import Rating from '../Components/Rating';
+import { connect } from 'react-redux';
+import { addToCart } from '../Redux/Cart/Cart-Action';
+import { addToWishlist } from '../Redux/Wishlist/Wishlist-action';
 const {height, width} = Dimensions.get('window')
 
-export default function SingleProduct({route}) {
+const SingleProduct = ({route, addToCart, addToWishlist}) => {
     const item = route.params.item;
     const image = route.params.image;
+    const cartItem = route.params.CartItem;
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState([])
     const regex = /(<([^>]+)>)/ig;
@@ -54,7 +58,7 @@ export default function SingleProduct({route}) {
       else {
         return (
             <View style={styles.main}>
-                <TitleHeader title={item.name.substring(0,20)}/>
+                <TitleHeader title={`${item.name.substr(0,15)}...`} parent='Home'/>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.productContainer}>
                         <Image style={styles.image} source={{uri : image}}/>
@@ -62,7 +66,12 @@ export default function SingleProduct({route}) {
                             <Text style={{fontSize : 18, marginHorizontal : 10}}>{item.name}</Text>
                             <View style={{flexDirection : 'row', justifyContent : 'space-between'}}>
                                 <Text style={{fontSize : 22, fontWeight : 'bold', marginHorizontal : 10}}>₹ {item.regular_price}</Text>
-                                <TouchableOpacity><Ionicons name='heart-outline' size={30} style={{color : '#c60607'}}/></TouchableOpacity>
+                                <TouchableOpacity onPress={()=>{
+                                    addToWishlist(cartItem)
+                                    ToastAndroid.show("Added to whishlist", ToastAndroid.SHORT);
+                                }}>
+                                    <Ionicons name='heart-outline' size={30} style={{color : '#c60607'}}/>
+                                </TouchableOpacity>
                             </View>
                             <View style={{flexDirection : 'row', paddingHorizontal : 10}}>
                                 <Text style={{backgroundColor : 'green', color : 'white', paddingHorizontal : 5, borderRadius : 10}}>%</Text>
@@ -126,7 +135,10 @@ export default function SingleProduct({route}) {
                         <Text style={[styles.btnText,{color : 'white'}]}>Share</Text>
                         <Icon color='white' style={{marginHorizontal : 5}} size={20} name='whatsapp'/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn,{borderColor : 'red'}]}>
+                    <TouchableOpacity onPress={()=>{
+                        addToCart(cartItem)
+                        ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
+                        }} style={[styles.btn,{borderColor : 'red'}]}>
                         <Text style={[styles.btnText,{color :'red'}]}>Add To Cart</Text>
                     </TouchableOpacity>
                 </View>
@@ -146,7 +158,7 @@ const styles = StyleSheet.create({
     image : {
         height : height*0.7,
         width : width-20,
-        resizeMode : 'cover'
+        resizeMode : 'contain'
     },
     productDetails : {
         width : width,
@@ -211,3 +223,12 @@ const styles = StyleSheet.create({
         fontSize : 18
     }
 })
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addToCart : (item)=>dispatch(addToCart(item)),
+        addToWishlist : (item)=>dispatch(addToWishlist(item))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SingleProduct)

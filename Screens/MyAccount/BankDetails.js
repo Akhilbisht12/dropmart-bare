@@ -24,6 +24,7 @@ const BankDetails = ({profile, navigation}) => {
             console.log(response)
             if(response.data.ifsc===''){
                 setEdit(true);
+                setLoading(false)
             }else{
                 setEdit(false)
                 setData(response.data)
@@ -119,19 +120,19 @@ const BankDetails = ({profile, navigation}) => {
                     <View style={styles.showDetails}>
                         <View style={styles.flexBetween}>
                             <Text style={styles.lowTxt}>Account Holder's Name</Text>
-                            <Text style={styles.HighTxt}>{data.beneficiary_name}</Text>
+                            <Text style={styles.HighTxt}>{data?data.beneficiary_name:''}</Text>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={styles.lowTxt}>Account Number</Text>
-                            <Text style={styles.HighTxt}>{data.account_number}</Text>
+                            <Text style={styles.HighTxt}>{data?data.account_number:''}</Text>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={styles.lowTxt}>Account IFSC</Text>
-                            <Text style={styles.HighTxt}>{data.ifsc}</Text>
+                            <Text style={styles.HighTxt}>{data?data.ifsc:''}</Text>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={styles.lowTxt}>Benefeciary name</Text>
-                            <Text style={styles.HighTxt}>{data.beneficiary_name}</Text>
+                            <Text style={styles.HighTxt}>{data?data.beneficiary_name:''}</Text>
                         </View>
                         <TouchableOpacity style={{marginVertical : 20}} onPress={()=>setEdit(!edit)}>
                             <Text style={{textAlign : 'center', color : '#c60607'}}>Click Here To Edit Details</Text>

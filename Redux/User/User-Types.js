@@ -4,3 +4,6 @@ export const EDIT_USER = 'EDIT_USER';
 export const ADD_BILLING = 'ADD_BILLING';
 export const ADD_SHIPPING = 'ADD_SHIPPING';
 export const DELETE_SHIPPING = 'DELETE_SHIPPING';
+export const EDIT_SENDER = 'EDIT_SENDER';
+export const EDIT_PHONE = 'EDIT_PHONE';
+export const EDIT_BILLING = 'EDIT_BILLING';

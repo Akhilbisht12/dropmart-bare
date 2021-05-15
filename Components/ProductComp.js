@@ -18,8 +18,7 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
     var i = image.split('.')
     var img = i[0]+'.'+i[1]+'.'+i[2]+'-150x150.'+i[3]
     const[disabled, setDisabled] = useState(false)
-    const [color, setColor] = useState(false);
-
+    const name = item.name.substr(0,40);
     const navigation = useNavigation();
     const CartItem = {
         name : item.name,
@@ -36,7 +35,7 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
             return((Math.round(((item.regular_price-item.sale_price)/item.regular_price)*100) + '% OFF')
             )
         }else{
-            return 'On MRP'
+            return 'On Sale'
         }
     }
 
@@ -82,7 +81,7 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
          borderBottomRightRadius : 10,
          color : 'white',
          position : 'absolute',
-         top : 10
+         top : 10,
         },
         imageCont : {
             alignItems : 'center'
@@ -93,9 +92,8 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
             resizeMode : 'contain'
         },
         name : {
-            fontSize : 18,
-            fontWeight : '500',
-            color : 'black'
+            fontSize : 16,
+            fontWeight : 'bold',
         },
         purchase : {
             flexDirection :'row',
@@ -134,30 +132,28 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
         }
      })
 
-     const handleWishlist = () =>{
-         setColor(true);
-         addToWishlist(CartItem)
-     }
-     
 
     return (
         <SafeAreaView>
             <View style={styles.main}>
                 <View>
-                    <TouchableOpacity onPress={()=>navigation.navigate('SingleProduct', {item, image})}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('SingleProduct', {item, image, CartItem})}>
                         <View style={styles.imageCont}>
                             <Image style={styles.image} source={{uri : image}}/>
                         </View>
                         <Text style={styles.offer}>{calculateDiscount()}</Text>
-                        <Text style={styles.name}>{item.name.substring(0, 55)}..</Text>
+                        <Text style={styles.name}>{name}..</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <View>
                         <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                             {item.categories?<Text style={styles.cat}>{item.categories[0].name}</Text>:console.log('no category')}
-                            <TouchableOpacity onPress={()=>handleWishlist()} style={styles.wishlist}>
-                                <Ionicon name={color?'heart':'heart-outline'} color='#C60607' size={30}/>
+                            <TouchableOpacity onPress={()=>{
+                                addToWishlist(CartItem)
+                                ToastAndroid.show('Added to wishlist', ToastAndroid.SHORT)
+                            }} style={styles.wishlist}>
+                                <Ionicon name={'heart-outline'} color='#C60607' size={30}/>
                             </TouchableOpacity>
                         </View>
                         <View>
@@ -174,7 +170,10 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
                             <Text style={{fontSize : 20, color : 'white'}}>Share</Text>
                             <Icon color='white' style={{marginHorizontal : 5}} size={20} name='whatsapp'/>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>addToCart(CartItem)}>
+                        <TouchableOpacity onPress={()=>{
+                            addToCart(CartItem)
+                            ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
+                        }}>
                             <Ionicon style={styles.icon} size={15} name='cart'/>
                         </TouchableOpacity>
                     </View>

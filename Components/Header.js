@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import { connect } from 'react-redux';
 
-const Header = ({cart}) => {
+const Header = ({cart, wishlist}) => {
     const navigation = useNavigation();
     const [counter, setCounter] = useState(0)
     useEffect(() => {
@@ -30,8 +30,9 @@ const Header = ({cart}) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>navigation.navigate('Wishlist')}>
                         <Ionicons name='heart-outline' style={styles.icon} color='white'/>
+                        <Text style={styles.counter}>{wishlist.length}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>navigation.navigate('Cart')}>
+                    <TouchableOpacity style={{marginHorizontal : 5}} onPress={()=>navigation.navigate('Cart')}>
                         <Ionicons name='cart' style={styles.icon} color='white' />
                         <Text style={styles.counter}>{counter}</Text>
                     </TouchableOpacity>
@@ -111,7 +112,8 @@ const styles= StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        cart : state.cart.cart
+        cart : state.cart.cart,
+        wishlist : state.wishlist.wishlist
     }
 }
 

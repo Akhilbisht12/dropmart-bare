@@ -26,7 +26,7 @@ const Account = ({profile}) => {
             <TitleHeader title='My account'/>
             <ScrollView>
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
                         <View style={styles.flexBetween}>
                             <View style={styles.flexBetween}>
                                 <Image style={styles.userImage} source={{uri : 'https://secure.gravatar.com/avatar/922cd3807dcf9d327d6d602434b6ddf0?s=96&d=mm&r=g'}}/>

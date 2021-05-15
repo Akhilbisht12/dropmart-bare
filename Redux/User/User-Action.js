@@ -53,3 +53,31 @@ export const editUser = (user) => {
         }
     }
 }
+
+export const editSender = ({first_name, last_name}) => {
+    return {
+        type : actionTypes.EDIT_SENDER,
+        payload : {
+            first_name,
+            last_name
+        }
+    }
+}
+
+export const editPhone = (phone) => {
+    return {
+        type : actionTypes.EDIT_PHONE,
+        payload : {
+            phone
+        }
+    }
+}
+
+export const editBilling = (billing) => {
+    return {
+        type : actionTypes.EDIT_BILLING,
+        payload : {
+            billing
+        }
+    }
+}

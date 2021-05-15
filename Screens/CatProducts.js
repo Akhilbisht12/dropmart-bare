@@ -61,11 +61,10 @@ export default function CatProducts({route}) {
     }
 
     if(loading) return(
-        <View>
-            <ScrollView>
-                <ProductLoader/>
-                <ProductLoader/>
-            </ScrollView>
+        <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+            <ProductLoader/>
+            <ProductLoader/>
+            <ProductLoader/>
         </View>
         
     )

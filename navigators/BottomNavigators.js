@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Screens/Home';
 import MyOrders from '../Screens/MyOrders';
-import MyAccount from '../Screens/Auth/MyAccount';
 import Search from '../Screens/Search';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Account from '../Screens/MyAccount/Account';

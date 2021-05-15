@@ -5,7 +5,8 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Loader from '../Components/Loader';
 import TitleHeader from '../Components/TitleHeader';
-import WooCommerce from '../Components/WooCommerce'
+import WooCommerce from '../Components/WooCommerce';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const MyOrders = ({navigation, profile}) => {
     const [loading, setLoading] = useState(true);
@@ -28,18 +29,58 @@ const MyOrders = ({navigation, profile}) => {
         return unsubscribe
     }, [navigation])
 
-    const identifyStatus = ({item}) =>{
-        if(item.status === 'pending' || item.status==='on-hold') return <Text style={[styles.btn, {backgroundColor : 'orange'}]}>{item.status}</Text>
-        else if(item.status === 'processing' || item.status==='refunded') return <Text style={[styles.btn, {backgroundColor : '#3399ff'}]}>{item.status}</Text>
-        else if(item.status === 'completed') return <Text style={[styles.btn, {backgroundColor : '#62BA03'}]}>{item.status}</Text>
-        else if(item.status === 'failed' || item.status === 'cancelled') return <Text style={[styles.btn, {backgroundColor : '#ff3300'}]}>{item.status}</Text>
+    const identifyStatus = (status) =>{
+        switch (status) {
+            case 'pending':
+                return {text : 'Placed'}
+            case 'processing':
+                return {text : 'Accepted'}
+            case 'on-hold':
+                return {text : 'Packed'}
+            case 'failed':
+                return {text : 'Shipped'}
+            case 'completed':
+                return {text : 'Delivered'}
+            case 'refunded':
+                return {text : 'Payout'}
+            case 'cancelled':
+                return {text : 'Cancelled'}
+            default:
+        }
     }
-    if(loading){
-        return <Loader/>
-    }else if(orders.length===0 || orders=='undefined'){
+
+    const OrderComp = ({item}) => {
         return(
-            <View>
-                <Text>You dont have any orders</Text>
+            <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('SingleOrder', {item})}>
+                <View style={styles.order}>
+                    <View style={styles.in}>
+                        <Text style={styles.txt}>Order ID</Text>
+                        <Text style={styles.green}>#{item.id}</Text>
+                    </View>
+                    <View style={styles.in}>
+                        <Text style={styles.txt}>Order Count</Text>
+                        <Text style={{fontSize : 18, fontWeight : 'bold'}}>{item.line_items.length}</Text>
+                    </View>
+                    <View style={styles.in}>
+                        <Text style={styles.txt}>Total</Text>
+                        <Text style={styles.green}>{item.total}</Text>
+                    </View>
+                    <View style={styles.in}>
+                        <Text style={styles.txt}>Status</Text>
+                        <Text style={{backgroundColor : '#c60607', color : 'white', paddingHorizontal : 20, paddingVertical : 5, borderRadius : 5}}>{identifyStatus(item.status).text}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    if(loading)return <Loader/>
+
+    else if(orders.length===0 || orders=='undefined'){
+        return(
+            <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                <Ionicons name='cube' size={80} color='#c60607' />
+                <Text style={{fontSize : 30, marginVertical : 20}}>You dont have any orders</Text>
             </View>
         )
     }else{
@@ -49,26 +90,7 @@ const MyOrders = ({navigation, profile}) => {
                 <ScrollView>
                 {orders.map((item)=>{
                     return(
-                        <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('SingleOrder', {item})}>
-                            <View style={styles.order}>
-                                <View style={styles.in}>
-                                    <Text style={styles.txt}>Order ID</Text>
-                                    <Text style={styles.green}>#{item.id}</Text>
-                                </View>
-                                <View style={styles.in}>
-                                    <Text style={styles.txt}>Order Count</Text>
-                                    <Text style={{fontSize : 18, fontWeight : 'bold'}}>{item.line_items.length}</Text>
-                                </View>
-                                <View style={styles.in}>
-                                    <Text style={styles.txt}>Total</Text>
-                                    <Text style={styles.green}>{item.total}</Text>
-                                </View>
-                                <View style={styles.in}>
-                                    <Text style={styles.txt}>Status</Text>
-                                    {identifyStatus({item})}
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                        <OrderComp key={item.id} item={item}/>
                         )
                     })}
                 </ScrollView>

@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../Screens/Home";
 import SignUp from "../Screens/Auth/SignUp";
 import Login from '../Screens/Auth/Login'
-import MyAccount from '../Screens/Auth/MyAccount'
 import Cart from '../Screens/CheckoutScreen/Cart';
 import OnBoardingScreen from '../Screens/OnBoardingScreens/OnBoardingScreen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -28,6 +27,7 @@ import BankDetails from "../Screens/MyAccount/BankDetails";
 import PhoneAuth from "../Screens/Auth/PhoneAuth";
 import PhoneToWoo from "../Screens/Auth/PhoneToWoo";
 import ForgotPassword from "../Screens/Auth/ForgotPassword";
+import Profile from '../Screens/MyAccount/Profile'
 
 const data = {
   screenOne : {
@@ -74,7 +74,6 @@ function ScreenOne(){
 
 const StackNavigator = ({profile, billing, wishlist}) => {
 
-  console.log(profile)
   console.log(billing)
   const Stack = createStackNavigator();
   // const [initialRoute, setInitialRoute] = useState('');
@@ -102,6 +101,7 @@ const StackNavigator = ({profile, billing, wishlist}) => {
         <Stack.Screen name="Signup" component={SignUp} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="MyAccount" component={Account} />
+        <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Home" component={BottomNavigators} />
         <Stack.Screen name="CatProducts" component={CatProducts} />
         <Stack.Screen name="SingleOrder" component={SingleOrder} />

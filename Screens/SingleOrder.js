@@ -11,12 +11,6 @@ export default function SingleOrder({route}) {
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const item = route.params.item;
-    const statusBtn = () => {
-        if(item.status === 'pending' || item.status==='on-hold') return <Text style={[styles.btn, {backgroundColor : 'orange'}]}>{item.status}</Text>
-        else if(item.status === 'processing' || item.status==='refunded') return <Text style={[styles.btn, {backgroundColor : '#3399ff'}]}>{item.status}</Text>
-        else if(item.status === 'completed') return <Text style={[styles.btn, {backgroundColor : '#62BA03'}]}>{item.status}</Text>
-        else if(item.status === 'failed' || item.status === 'cancelled') return <Text style={[styles.btn, {backgroundColor : '#ff3300'}]}>{item.status}</Text>
-    }
     let date = item.date_created.split('T')[0].split('-')
     let total = 0
     const handleCancelOrder = () => {
@@ -60,7 +54,7 @@ export default function SingleOrder({route}) {
                         <Text style={{fontWeight : 'bold', fontSize : 16}}>{item.status}</Text>
                     </View>
                     <View>
-                        <Text>{item.meta_data[0].value[0].tracking_number}</Text>
+                        <Text>{item.meta_data[0]?item.meta_data[0].value[0].tracking_number:''}</Text>
                     </View>
                 </View>
                 <View style={{paddingHorizontal : 20, paddingVertical : 10, backgroundColor : 'white', marginVertical : 5}}>
@@ -102,7 +96,7 @@ export default function SingleOrder({route}) {
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Shipped</Text>
                             <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+3)}</Text>
-                            {item.status==='completed'?
+                            {item.status==='failed'?
                             <View>
                                 <Text>Your order Shipped Successfully !</Text>
                                 <TouchableOpacity onPress={()=>Linking.openURL(`https://shiprocket.co/tracking/${item.meta_data[0].value[0].tracking_number}`)}>
@@ -111,7 +105,7 @@ export default function SingleOrder({route}) {
                             </View>:console.log('')}
                             
                         </View>
-                        {item.status==='completed'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
+                        {item.status==='failed'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
@@ -121,7 +115,7 @@ export default function SingleOrder({route}) {
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Delivered</Text>
                             <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+7)}</Text>
                         </View>
-                        {item.status==='cancelled'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
+                        {item.status==='completed'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>

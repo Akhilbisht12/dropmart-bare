@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import TitleHeader from '../../Components/TitleHeader'
 import { addShipping } from '../../Redux/User/User-Action'
@@ -22,21 +22,26 @@ const AddAddress = ({Parent, addShipping}) => {
     const [country, set_country] = useState('');
 
     const handleUserSave = () => {
-        let temp = {
-            first_name,
-            last_name,
-            phone,
-            address_1,
-            address_2,
-            city,
-            pincode,
-            state,
-            country,
-            id : Math.floor(Math.random() * 1001 + address_1)
+        if(first_name === '' || last_name ==='' && phone === '' || address_1 === '' || address_2 === '' || city === '' || pincode === ''|| country === ''){
+            ToastAndroid.show("Fill Out complete details !", ToastAndroid.SHORT);
+        }else{
+            let temp = {
+                first_name,
+                last_name,
+                phone,
+                address_1,
+                address_2,
+                city,
+                pincode,
+                state,
+                country,
+                id : Math.floor(Math.random() * 1001 + address_1)
+            }
+            addShipping(temp)
+            navigation.navigate(Parent)
+            ToastAndroid.show("Address Saved Successfully", ToastAndroid.SHORT);
         }
-        addShipping(temp)
-        navigation.navigate(Parent)
-        alert('Address Saved Successfully')
+        
     }
 
     const styles = StyleSheet.create({
@@ -85,7 +90,7 @@ const AddAddress = ({Parent, addShipping}) => {
             <TitleHeader title='Add a shipping Address'/>
             <ScrollView style={styles.scroll}>
                 <View style={styles.scrollView}>
-                    <TextInput value={first_name} onChangeText={set_first_name} placeholder='First Name' style={[styles.input]}/>
+                    <TextInput  value={first_name} onChangeText={set_first_name} placeholder='First Name' style={[styles.input]}/>
                     <TextInput value={last_name} onChangeText={set_last_name} placeholder='Last Name' style={[styles.input]}/>
                     <TextInput value={phone} onChangeText={set_phone} placeholder='Mobile Number' style={[styles.input]}/>
                     <TextInput value={address_1} onChangeText={set_address_1} placeholder='House No' style={[styles.input]}/>

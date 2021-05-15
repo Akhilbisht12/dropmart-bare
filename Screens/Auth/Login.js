@@ -62,8 +62,8 @@ const Login = ({navigation,addUser, addBilling}) => {
                     addUser({
                         id: wooresponse[0].id,
                         email: email,
-                        first_name: wooresponse[0].billing.first_name,
-                        last_name: wooresponse[0].billing.last_name,
+                        first_name: wooresponse[0].first_name,
+                        last_name: wooresponse[0].last_name,
                         token : response.data.token,
                         username: email,
                       })

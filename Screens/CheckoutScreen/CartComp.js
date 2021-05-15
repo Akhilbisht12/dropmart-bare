@@ -29,12 +29,12 @@ const CartComp = ({item, removeFromCart, adjustItemQty, adjustItemMargin}) => {
                     <View style={styles.priceView}>
                         <Text>Price : ₹ {parseFloat(item.price*item.qty).toFixed(2)}</Text>
                         <View style={{display : 'flex',flexDirection : 'row', alignItems :'center'}}>
-                            <TouchableOpacity onPress={()=>handleQuantityChange(true)}>
-                                <Icon color='black' name='plus' style={styles.icon}/>
-                            </TouchableOpacity>
-                            <Text style={{marginHorizontal : 15}}>{item.qty}</Text>
                             <TouchableOpacity onPress={()=>handleQuantityChange(false)}>
                                 <Icon color='black' name='minus' style={styles.icon}/>
+                            </TouchableOpacity>
+                            <Text style={{marginHorizontal : 15}}>{item.qty}</Text>
+                            <TouchableOpacity onPress={()=>handleQuantityChange(true)}>
+                                <Icon color='black' name='plus' style={styles.icon}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.trash} onPress={()=>removeFromCart(item.id)}>
                                 <Icon color='white' name='trash'/>
@@ -54,7 +54,7 @@ const CartComp = ({item, removeFromCart, adjustItemQty, adjustItemMargin}) => {
             </View>
             <View style={styles.marginView}>
                 <Text style={styles.marginTxt}>Your Margin : </Text>
-                <Text style={[styles.marginTxt,{marginRight : 15}]}>₹ {item.final_price-item.price}</Text>
+                <Text style={[styles.marginTxt,{marginRight : 15}]}>₹ {(item.final_price-item.price)*item.qty}</Text>
             </View>
         </View>
     )
@@ -125,9 +125,11 @@ const styles = StyleSheet.create({
         alignItems : 'center'
     },
     marginInput : {
-        borderBottomWidth : 2,
+        borderBottomWidth : 1,
         marginRight : 15,
-        width : 30
+        width : 50,
+        height : 40,
+        textAlignVertical : 'bottom'
     },
     marginTxt : {
         color : 'green',

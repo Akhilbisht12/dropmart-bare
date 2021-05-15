@@ -34,7 +34,7 @@ const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
                 </View>
                 <View>
                     <View style={{flexDirection : 'row', justifyContent : 'space-between', paddingHorizontal : 10, paddingVertical : 5}}>
-                        <Text style={{fontSize : 16, color : 'gray'}}>{item.name}</Text>
+                        <Text style={{fontSize : 16, color : 'gray', width : width*0.75}}>{item.name}</Text>
                         <TouchableOpacity onPress={()=>removeFromWishlist(item.id)}>
                             <Ionicons name='heart' size={30} color='#c60607'/>
                         </TouchableOpacity>
@@ -63,7 +63,7 @@ const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
     }
 
     return (
-        <View>
+        <View style={styles.main}>
             <TitleHeader title='Wishlist' parent='Home'/>
             <ScrollView>
                 {wishlist.map((item)=>{
@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
     },
     wishImg : {
         width :width,
-        height : height*0.3
+        height : height*0.3,
+        resizeMode : 'contain'
     },
     bdTxt : {
         fontWeight : 'bold',

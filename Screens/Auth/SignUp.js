@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, ScrollView, StatusBar, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,12 +9,14 @@ import Axios from 'axios';
 import { connect } from 'react-redux';
 import { addUser } from '../../Redux/User/User-Action';
 
+const {width, height} = Dimensions.get('window')
+
  const SignUp = ({navigation, addUser}) => {
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
-     const [name, setName] = useState('');
-     const [street, setStreet] = useState('');
-     const [flat, setFlat] = useState('');
+     const [first_name, set_first_name] = useState('');
+     const [last_name, set_last_name] = useState('');
+     const [confirm_password, set_confirm_password] = useState('');
      const [landmark, setLandmark] = useState('');
      const [mobile, setMobile] = useState('');
      const [next, setNext] = useState(true);
@@ -72,7 +74,9 @@ import { addUser } from '../../Redux/User/User-Action';
     //  }
 
     const handleSignUp = () => {
-        if(email && password){
+        if(password!==confirm_password){
+            ToastAndroid.show('Passwords dont match', ToastAndroid.SHORT)
+        }else if(email && password && confirm_password && first_name && last_name){
             setLoading(true)
             Axios.post('https://dropmarts.com/wp-json/wp/v2/users/register', {
                 username : email,
@@ -82,6 +86,7 @@ import { addUser } from '../../Redux/User/User-Action';
             .then(response=>{
                 WooCommerce.get("customers",{email})
                 .then((wooresponse) => {
+                    WooCommerce.put(`customers/${wooresponse[0].id}`, {first_name, last_name})
                     Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
                         username : email,
                         password : password
@@ -90,8 +95,8 @@ import { addUser } from '../../Redux/User/User-Action';
                         addUser({
                             id: wooresponse[0].id,
                             email: email,
-                            first_name: '',
-                            last_name: '',
+                            first_name: first_name,
+                            last_name: last_name,
                             token : response.data.token,
                             username: email,
                           })
@@ -107,9 +112,9 @@ import { addUser } from '../../Redux/User/User-Action';
             })
             .then(()=>{
                 setLoading(false)
-                navigation.navigate('Details')
+                navigation.navigate('Home')
             })
-        }else{
+        } else{
             alert('Fill Out Details')
         }
     }
@@ -118,32 +123,42 @@ import { addUser } from '../../Redux/User/User-Action';
         return <Loader/>
     }else{
         return(
-            <View style={styles.main}>
-                <View style={{alignItems : 'center'}}>
-                    <Ionicons name='book' color={'#c60607'} size={50}/>
-                    <Text style={{fontSize : 40}}>Welcome</Text>
-                    <Text>Sign Up to continue</Text>
-                </View>
-                <View>
-                    <TextInput style={styles.input} placeholder='Enter Email' placeholderTextColor={'grey'} value={email} 
-                    onChangeText={(text)=>setEmail(text)}/>
+            <ScrollView style={{flex : 1}}>
+                <View style={styles.main}>
+                    <View style={{alignItems : 'center'}}>
+                        <Ionicons name='book' color={'#c60607'} size={50}/>
+                        <Text style={{fontSize : 40}}>Welcome</Text>
+                        <Text>Sign Up to continue</Text>
+                    </View>
+                    <View>
+                        <View style={{flexDirection : 'row', justifyContent : 'space-evenly'}}>
+                            <TextInput style={[styles.input,{width : width*0.4}]} placeholder='First Name' placeholderTextColor={'grey'} value={first_name} 
+                            onChangeText={set_first_name}/>
+                            <TextInput style={[styles.input,{width : width*0.44}]} placeholder='Last Name' placeholderTextColor={'grey'} value={last_name} 
+                            onChangeText={set_last_name}/>
+                        </View>
+                        <TextInput textContentType='emailAddress' style={[styles.input,{width : width-50}]} placeholder='Enter Email' placeholderTextColor={'grey'} value={email} 
+                        onChangeText={(text)=>setEmail(text)}/>
 
-                    <TextInput placeholderTextColor={'grey'} style={styles.input} placeholder='Enter Password'
-                    value={password} onChangeText={(text)=>setPassword(text)}/>
-                </View>
-                <View>
-                    <TouchableOpacity style={[styles.btn,{backgroundColor : '#c60607'}]} onPress={()=>{handleSignUp()}}>
-                        <Text style={{color : 'white'}}>Sign Up</Text>
+                        <TextInput placeholderTextColor={'grey'} style={[styles.input,{width : width-50}]} placeholder='Enter Password'
+                        value={password} onChangeText={(text)=>setPassword(text)}/>
+                        <TextInput placeholderTextColor={'grey'} style={[styles.input,{width : width-50}]} placeholder='Confirm Password'
+                        value={confirm_password} onChangeText={set_confirm_password}/>
+                    </View>
+                    <View>
+                        <TouchableOpacity style={[styles.btn,{backgroundColor : '#c60607'}]} onPress={()=>{handleSignUp()}}>
+                            <Text style={{color : 'white'}}>Sign Up</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.btn,{borderWidth : 1, borderColor : '#c60607'}]} onPress={()=>navigation.navigate('PhoneAuth')}>
+                            <Text style={{color : '#c60607'}}>Login in with Phone Number</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={{flexDirection : 'row'}} onPress={()=>navigation.navigate('Login')}>
+                        <Text>Already have a account?</Text>
+                        <Text style={{color : '#c60607', fontWeight : 'bold'}}> Sign In</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn,{borderWidth : 1, borderColor : '#c60607'}]} onPress={()=>navigation.navigate('PhoneAuth')}>
-                        <Text style={{color : '#c60607'}}>Login in with Phone Number</Text>
-                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={{flexDirection : 'row'}} onPress={()=>navigation.navigate('Login')}>
-                    <Text>Already have a account?</Text>
-                    <Text style={{color : '#c60607', fontWeight : 'bold'}}> Sign In</Text>
-                </TouchableOpacity>
-            </View>
+            </ScrollView>
         )
     } 
         // else {
@@ -172,16 +187,16 @@ import { addUser } from '../../Redux/User/User-Action';
 
  const styles = StyleSheet.create({
      main : {
-         flex : 1,
+         flex : 2,
          justifyContent : 'space-evenly',
          alignItems : 'center',
          marginTop : StatusBar.currentHeight,
-         marginBottom : StatusBar.currentHeight
+         marginBottom : StatusBar.currentHeight,
+         height : height-100
      },
      input : {
          borderWidth : 1,
          borderColor : 'lightgrey',
-         width : Dimensions.get('window').width - 50,
          marginVertical : 5,
          paddingHorizontal : 10,
          paddingVertical : 5,

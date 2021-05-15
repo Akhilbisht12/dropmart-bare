@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, ToastAndroid } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TitleHeader from '../../Components/TitleHeader'
@@ -14,11 +14,14 @@ import Loader from '../../Components/Loader';
 const OrderSummary = ({cart, billing, route, shipping, profile, navigation, emptyCart}) => {
     console.log(route.params.index)
     const [productTotal, setProductTotal] = useState();
+    const [discount, setDiscount] = useState(0);
     const [customerPrice, setCustomerPrice] = useState();
     const [isOnline, setOnline] = useState(true)
     const [loading, setLoading] = useState(false)
     const [isGift, setGift] = useState(false)
     const [giftMessage, setGiftMessage] = useState('')
+    const [coupon, setCoupon] = useState('')
+    const [off, setOff] = useState(0)
     let today = new Date().toISOString().slice(0, 10).split('-')
     useEffect(()=>{
 
@@ -33,6 +36,17 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
         setCustomerPrice(cusPrice);
 
     },[cart, productTotal, setProductTotal, customerPrice, setCustomerPrice,]);
+
+    const handleCoupon = () => {
+        WooCommerce.get("coupons",{code : coupon})
+        .then((response) => {
+           response.length === 0 ?ToastAndroid.show('No such Coupon Code', ToastAndroid.SHORT): setOff(response[0].amount); ToastAndroid.show('Coupon added', ToastAndroid.SHORT)
+           setDiscount((productTotal*response[0].amount)/100)
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     const order = () =>{
         setLoading(true)
@@ -97,24 +111,26 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             description: 'Order Payment',
             image: 'https://dropmarts.com/wp-content/uploads/2021/05/dropmart-logo.jpeg',
             currency: 'INR',
-            key: 'rzp_test_BwzGHOLN020chK',
-            amount: '100',
+            key: 'rzp_live_nPynaXuvHFfPoS',
+            amount: `${(isGift?customerPrice+75-discount:customerPrice-discount)*100}`,
             name: 'DropMart',
             prefill: {
-              email: 'akhilbisht83@gmail.com',
-              contact: '8979877325',
-              name: 'Akhil bisht'
+              email: `${profile.email}`,
+              contact: `${billing.phone}`,
+              name: `${billing.first_name + ' ' + billing.last_name}`
             },
             theme: {color: '#c60607'}
           }
-          RazorpayCheckout.open(options).then((data) => {
+          RazorpayCheckout.open(options)
+          .then((data) => {
             // handle success
             alert(`Success: ${data.razorpay_payment_id}`);
             order();
-          }).catch((error) => {
+          })
+          .catch((error) => {
             // handle failure
             console.log(error)
-            alert('Payment Unsuccessful');
+            ToastAndroid.show('Payment Unsuccessfull', ToastAndroid.SHORT)
           });
     }
 
@@ -140,6 +156,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         <Text style={{textAlign : 'center'}}>Estimated Delivery by</Text>
                         <Text  style={[styles.fontBd,{textAlign : 'center'}]}>{today[0] + '-' +today[1]+ '-'+(parseInt(today[2])+7)}</Text>
                     </View>
+                    {/* apply gift wrap section */}
                     <View style={[styles.colorCont]}>
                         <Text  style={[styles.fontBd,{textAlign : 'center'}]}>Choose Gift Options</Text>
                         <View style={{flexDirection : 'row'}}>
@@ -153,15 +170,33 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         placeholder='Gift Message' />
                         <Text>Note : Additional ₹75 will be charged for gift packaging</Text>
                     </View>
+                    {/* coupon code section */}
+                    <View style={[styles.colorCont]}>
+                        <Text  style={[styles.fontBd,{textAlign : 'center', marginVertical : 10}]}>Have coupon code ?</Text>
+                        <View style={{flexDirection : 'row',borderWidth : 1, borderColor : 'lightgray', alignItems : 'center', justifyContent : 'space-between', paddingHorizontal : 10, borderRadius: 5}}>
+                            <TextInput
+                                value={coupon}
+                                onChangeText={setCoupon}
+                                style={{height : 40, marginVertical : 1, width : 200}}
+                                placeholder='Coupon Code' />
+                            <TouchableOpacity onPress={()=>handleCoupon()}>
+                                <Text style={{color : '#c60607'}}>Apply</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     <View style={[styles.colorCont]}>
                         <Text  style={[styles.fontBd]}>Price Breakup</Text>
                         <View style={styles.flexBetween}>
                             <Text>Product Charges</Text>
                             <Text>{productTotal}</Text>
                         </View>
-                        <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
+                        <View style={[styles.flexBetween]}>
                             <Text>Shipping Charges</Text>
                             <Text>{productTotal>199?0:49}</Text>
+                        </View>
+                        <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
+                            <Text>Coupon Discount</Text>
+                            <Text>{off}%</Text>
                         </View>
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
                             <Text>Gift Pack Charges</Text>
@@ -173,7 +208,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         </View>
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
                             <Text>Final Customer Price</Text>
-                            <Text>{isGift?customerPrice+75:customerPrice}</Text>
+                            <Text>{isGift?customerPrice+75-discount:customerPrice-discount}</Text>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={[styles.fontBd,{color : 'green'}]}>Margin Earned</Text>
