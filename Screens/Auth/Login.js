@@ -67,6 +67,7 @@ const Login = ({navigation,addUser, addBilling}) => {
                         token : response.data.token,
                         username: email,
                       })
+                      console.log(wooresponse[0].billing)
                     addBilling(wooresponse[0].billing)
                 })
                 .catch((error) => {

@@ -27,6 +27,17 @@ export const addShipping = (shipping) =>{
     }
 } 
 
+export const updateShipping = (temp,index) =>{
+    console.log(index)
+    return {
+        type : actionTypes.UPDATE_SHIPPING,
+        payload : {
+            updateShip : temp,
+            key : index
+        }
+    }
+} 
+
 export const deleteShipping = (id) =>{
     return {
         type : actionTypes.DELETE_SHIPPING,

@@ -15,7 +15,8 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     console.log(route.params.index)
     const [productTotal, setProductTotal] = useState();
     const [discount, setDiscount] = useState(0);
-    const [customerPrice, setCustomerPrice] = useState();
+    const [maxPrice, setMaxPrice] = useState();
+    const [margin, setMargin] = useState(0);
     const [isOnline, setOnline] = useState(true)
     const [loading, setLoading] = useState(false)
     const [isGift, setGift] = useState(false)
@@ -26,16 +27,17 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     useEffect(()=>{
 
         let price = 0;
-        let cusPrice = 0;
+        let maxprice = 0;
         let mar = 0;
         cart.map((item)=>{
             price += item.price*item.qty;
-            cusPrice += item.final_price*item.qty;
+            maxprice += item.regular_price*item.qty;
         })
         setProductTotal(price);
-        setCustomerPrice(cusPrice);
+        setMargin(price)
+        setMaxPrice(maxprice);
 
-    },[cart, productTotal, setProductTotal, customerPrice, setCustomerPrice,]);
+    },[cart, productTotal, setProductTotal]);
 
     const handleCoupon = () => {
         WooCommerce.get("coupons",{code : coupon})
@@ -57,9 +59,9 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             list.push({product_id : item.id,quantity : item.qty});
         })
         if(isGift){
-            fee_lines = [{name : 'User Earned Margin',total : `${customerPrice-productTotal}`},{name : 'Gift Pack Charges', total : '75'}]
+            fee_lines = [{name : 'User Earned Margin',total : `${margin-productTotal}`},{name : 'Gift Pack Charges', total : '75'}]
         }else {
-            fee_lines = [{name : 'User Earned Margin',total : `${customerPrice-productTotal}`}]
+            fee_lines = [{name : 'User Earned Margin',total : `${margin-productTotal}`}]
         }
 
         if(productTotal<=199){
@@ -112,7 +114,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             image: 'https://dropmarts.com/wp-content/uploads/2021/05/dropmart-logo.jpeg',
             currency: 'INR',
             key: 'rzp_live_nPynaXuvHFfPoS',
-            amount: `${(isGift?customerPrice+75-discount:customerPrice-discount)*100}`,
+            amount: `${(isGift?margin+75-discount:margin-discount)*100}`,
             name: 'DropMart',
             prefill: {
               email: `${profile.email}`,
@@ -135,7 +137,13 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     }
 
     const CompleteOrder = () => {
-        isOnline?handleRazorPay():order()
+        if(margin<productTotal){
+            ToastAndroid.show('Margin cannbot be below Product Total', ToastAndroid.SHORT)
+        }else if(margin>maxPrice){
+            ToastAndroid.show('Margin cannbot be above MRP', ToastAndroid.SHORT)
+        }else{
+            isOnline?handleRazorPay():order()
+        }
     }
 
     if(loading) return <Loader/>
@@ -175,6 +183,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         <Text  style={[styles.fontBd,{textAlign : 'center', marginVertical : 10}]}>Have coupon code ?</Text>
                         <View style={{flexDirection : 'row',borderWidth : 1, borderColor : 'lightgray', alignItems : 'center', justifyContent : 'space-between', paddingHorizontal : 10, borderRadius: 5}}>
                             <TextInput
+                                autoCapitalize={true}
                                 value={coupon}
                                 onChangeText={setCoupon}
                                 style={{height : 40, marginVertical : 1, width : 200}}
@@ -206,13 +215,18 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                             <Text>Order Total</Text>
                             <Text>{isGift?productTotal+75:productTotal}</Text>
                         </View>
+                        <View style={styles.flexBetween}>
+                            <Text>MRP Total</Text>
+                            <Text>{maxPrice}</Text>
+                        </View>
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
-                            <Text>Final Customer Price</Text>
-                            <Text>{isGift?customerPrice+75-discount:customerPrice-discount}</Text>
+                            <Text style={{fontWeight : 'bold'}}>Final Customer Price</Text>
+                            {/* <Text>{isGift?margin+75-discount:margin-discount}</Text> */}
+                            <TextInput style={{borderWidth : 1, height : 40, borderRadius : 5, width : 50}} value={margin} textContentType={Number} onChangeText={setMargin}/>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={[styles.fontBd,{color : 'green'}]}>Margin Earned</Text>
-                            <Text style={[styles.fontBd,{color : 'green'}]}>{customerPrice-productTotal}</Text>
+                            <Text style={[styles.fontBd,{color : 'green'}]}>{margin-productTotal}</Text>
                         </View>
                     </View>
                     <View style={[styles.colorCont]}>

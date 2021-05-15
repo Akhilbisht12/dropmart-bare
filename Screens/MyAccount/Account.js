@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import TitleHeader from '../../Components/TitleHeader'
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const List = ({name, title, navigate}) => {
     const navigation = useNavigation()
@@ -19,8 +20,16 @@ const List = ({name, title, navigate}) => {
     )
 }
 
+
+
 const Account = ({profile}) => {
     const navigation = useNavigation()
+
+    const handleLogout = () => {
+        AsyncStorage.clear();
+        navigation.navigate('Login')
+    }
+
     return (
         <View style={styles.main}>
             <TitleHeader title='My account'/>
@@ -54,7 +63,13 @@ const Account = ({profile}) => {
                             <Icon name='information-circle' color='grey' size={30}/>
                             <Text style={styles.listTitle}>Help & FAQ</Text>
                         </View>
-                    </TouchableOpacity>                    
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>handleLogout()}>
+                        <View style={styles.listMain}>
+                            <Icon name='log-out' color='grey' size={30}/>
+                            <Text style={styles.listTitle}>Logout</Text>
+                        </View>
+                    </TouchableOpacity>          
                     {/* <List name='settings' title='Settings' navigate='Cart'/> */}
                 </View>
                 <View style={styles.version}>

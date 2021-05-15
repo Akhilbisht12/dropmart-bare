@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text,Image, StyleSheet, Dimensions, ToastAndroid } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,16 +10,17 @@ import { useNavigation } from '@react-navigation/native';
 import {connect} from 'react-redux';
 import {addToCart} from '../Redux/Cart/Cart-Action';
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import { addToWishlist } from '../Redux/Wishlist/Wishlist-action';
+import { addToWishlist, removeFromWishlist } from '../Redux/Wishlist/Wishlist-action';
 
 const {height, width} = Dimensions.get('window')
 
-const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
+const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFromWishlist}) => {
     var i = image.split('.')
-    var img = i[0]+'.'+i[1]+'.'+i[2]+'-150x150.'+i[3]
+    const[inWish, setInWish] = useState(false)
     const[disabled, setDisabled] = useState(false)
     const name = item.name.substr(0,40);
     const navigation = useNavigation();
+
     const CartItem = {
         name : item.name,
         image : image,
@@ -29,6 +30,14 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
         sale_price : item.sale_price
     }
 
+    useEffect(()=>{
+        setInWish(false)
+        wishlist.map((wish)=>{
+            if(wish.id===item.id){
+                setInWish(true)
+            }
+        })
+    },[inWish, setInWish, wishlist])
 
     const calculateDiscount = () => {
         if(item.sale_price){
@@ -59,6 +68,18 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
               console.log('Error =>', err);
           }
       }
+
+    const handleWishlist = () =>{
+        if(disabled){
+            removeFromWishlist(item.id)
+            ToastAndroid.show('Removed from wishlist', ToastAndroid.SHORT)
+            setDisabled(false)
+        }else{
+            addToWishlist(CartItem)
+            ToastAndroid.show('Added to wishlist', ToastAndroid.SHORT)
+            setDisabled(true)
+        }
+    }
 
     const styles = StyleSheet.create({
         main : {
@@ -149,11 +170,8 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
                     <View>
                         <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                             {item.categories?<Text style={styles.cat}>{item.categories[0].name}</Text>:console.log('no category')}
-                            <TouchableOpacity onPress={()=>{
-                                addToWishlist(CartItem)
-                                ToastAndroid.show('Added to wishlist', ToastAndroid.SHORT)
-                            }} style={styles.wishlist}>
-                                <Ionicon name={'heart-outline'} color='#C60607' size={30}/>
+                            <TouchableOpacity onPress={()=>handleWishlist()} style={styles.wishlist}>
+                                <Ionicon name={inWish?'heart':'heart-outline'} color='#C60607' size={30}/>
                             </TouchableOpacity>
                         </View>
                         <View>
@@ -188,8 +206,15 @@ const ProductComp  = ({item, image, addToCart, addToWishlist}) => {
 const mapDispatchToProps = (dispatch) =>{
     return {
         addToCart : (id) =>dispatch(addToCart(id)),
-        addToWishlist : (item) => dispatch(addToWishlist(item))
+        addToWishlist : (item) => dispatch(addToWishlist(item)),
+        removeFromWishlist : (id) => dispatch(removeFromWishlist(id))
     }
 }
 
-export default connect(null, mapDispatchToProps)(ProductComp);
+const mapStateToProps = (state) => {
+    return {
+        wishlist : state.wishlist.wishlist
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductComp);

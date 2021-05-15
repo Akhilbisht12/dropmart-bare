@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleSheet, ScrollView,Dimensions } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, ScrollView,Dimensions, ToastAndroid } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import CartComp from './CartComp';
@@ -9,8 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 const {width,height} = Dimensions.get('window')
 
 const Cart = ({cart}) => {
+    const [access, setaccess] = useState(true)
     const navigation = useNavigation()
-
+    
     return (
         <View style={styles.main}>
             <TitleHeader title='Cart'/>

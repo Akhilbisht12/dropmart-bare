@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Share, ToastAndroid } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Share, ToastAndroid, TextInput } from 'react-native'
 import TitleHeader from '../Components/TitleHeader';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Sharing from 'expo-sharing';
@@ -13,12 +13,14 @@ import { addToCart } from '../Redux/Cart/Cart-Action';
 import { addToWishlist } from '../Redux/Wishlist/Wishlist-action';
 const {height, width} = Dimensions.get('window')
 
-const SingleProduct = ({route, addToCart, addToWishlist}) => {
+const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
     const item = route.params.item;
     const image = route.params.image;
     const cartItem = route.params.CartItem;
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState([])
+    const [rating, setRating] = useState(5)
+    const [postReview, setPostReview] = useState('')
     const regex = /(<([^>]+)>)/ig;
     const result = item.description.replace(regex, '');
 
@@ -29,6 +31,29 @@ const SingleProduct = ({route, addToCart, addToWishlist}) => {
             setLoading(false);
         })
     },[])
+
+    const PostReview = () => {
+        WooCommerce.post("products/reviews", {
+            product_id: item.id,
+            review: postReview,
+            reviewer: `${billing.first_name + ' ' + billing.last_name}`,
+            reviewer_email: billing.email,
+            rating: rating
+          })
+        .then((response) => {
+            if(response.verified === false){
+                ToastAndroid.show('You have not purchased this product', ToastAndroid.SHORT)
+                setPostReview('')
+                WooCommerce.delete(`products/reviews/${response.id}`, {force: true})
+            }else{
+                ToastAndroid.show('Review Submitted', ToastAndroid.SHORT)
+                setPostReview('')
+            }
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+        });
+    }
 
     const share = async()=> {
         try {
@@ -111,7 +136,7 @@ const SingleProduct = ({route, addToCart, addToWishlist}) => {
                         <View>
                             {reviews.length!==0?reviews.map((reviewItem)=>{
                                 return(
-                                    <View key={reviewItem.id} style={{width : width, padding : 20, borderTopColor : 'lightgrey', borderTopWidth : 1, marginVertical : 5}}>
+                                    <View key={reviewItem.id} style={{width : width, padding : 20, borderTopColor : 'lightgrey', borderTopWidth : 1, marginVertical : 5, backgroundColor : 'white'}}>
                                         <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                                             <View style={{flexDirection : 'row', alignItems : 'center'}}>
                                                 <Image style={{height : 30, width : 30, borderRadius : 20}} source={{uri : 'https://secure.gravatar.com/avatar/922cd3807dcf9d327d6d602434b6ddf0?s=24&d=mm&r=g'}}/>
@@ -127,6 +152,37 @@ const SingleProduct = ({route, addToCart, addToWishlist}) => {
                                     </View>
                                 )
                             }):console.log('')}
+                        </View>
+                        <View style={{backgroundColor : 'white', width : width, padding : 20}}>
+                            <Text style={{fontSize : 20, fontWeight : 'bold', marginVertical : 5}}>Write a review</Text>
+                            <View style={{flexDirection : 'row'}}>
+                                <TouchableOpacity onPress={()=>setRating(1)}>
+                                    <Ionicons name='star' color={rating>=1?'#ffd700':'grey'} size={20}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>setRating(2)}>
+                                    <Ionicons name='star' color={rating>=2?'#ffd700':'grey'} size={20}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>setRating(3)}>
+                                    <Ionicons name='star' color={rating>=3?'#ffd700':'grey'} size={20}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>setRating(4)}>
+                                    <Ionicons name='star' color={rating>=4?'#ffd700':'grey'} size={20}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={()=>setRating(5)}>
+                                    <Ionicons name='star' color={rating>=5?'#ffd700':'grey'} size={20}/>
+                                </TouchableOpacity>
+                            </View>
+                            <TextInput
+                            multiline
+                            value={postReview}
+                            onChangeText={setPostReview}
+                            numberOfLines={5}
+                            style={{borderWidth : 1, borderRadius : 5, width : width-40, height : 100, marginVertical : 5}}/>
+                            <TouchableOpacity
+                            onPress={()=>PostReview()}
+                            style={{backgroundColor : '#c60607', paddingVertical : 5, width : width*0.3, borderRadius : 5}}>
+                                <Text style={{textAlign : 'center', color : 'white'}}>Submit Review</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </ScrollView>
@@ -231,4 +287,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(SingleProduct)
+const mapStateToProps = (state) => {
+    return {
+        billing : state.user.billing
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)

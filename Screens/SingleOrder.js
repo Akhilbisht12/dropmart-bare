@@ -11,6 +11,7 @@ export default function SingleOrder({route}) {
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const item = route.params.item;
+    const value = route.params.status.value;
     let date = item.date_created.split('T')[0].split('-')
     let total = 0
     const handleCancelOrder = () => {
@@ -60,7 +61,7 @@ export default function SingleOrder({route}) {
                 <View style={{paddingHorizontal : 20, paddingVertical : 10, backgroundColor : 'white', marginVertical : 5}}>
                     <Text>Order Tracking</Text>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=1?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Placed</Text>
                             <Text style={{fontSize : 18}}>{item.date_created.split('T')[0]}</Text>
@@ -70,7 +71,7 @@ export default function SingleOrder({route}) {
                         </View>:console.log('')}
                     </View>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=2?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Accepted</Text>
                             <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+1)}</Text>
@@ -80,7 +81,7 @@ export default function SingleOrder({route}) {
                         </View>:console.log('')}
                     </View>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=3?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Packed</Text>
                             <Text style={{fontSize : 18}}>
@@ -92,7 +93,7 @@ export default function SingleOrder({route}) {
                         </View>:console.log('')}
                     </View>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=4?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Shipped</Text>
                             <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+3)}</Text>
@@ -110,7 +111,7 @@ export default function SingleOrder({route}) {
                         </View>:console.log('')}
                     </View>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=5?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Delivered</Text>
                             <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+7)}</Text>
@@ -120,7 +121,7 @@ export default function SingleOrder({route}) {
                         </View>:console.log('')}
                     </View>
                     <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
-                        <View style={{padding : 2, backgroundColor : 'green', height : 80, marginRight: 10}}></View>
+                        <View style={{padding : 2, backgroundColor : value>=6?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Margin Payout</Text>
                             <Text style={{fontSize : 18}}>On weekly cycle</Text>
@@ -133,7 +134,7 @@ export default function SingleOrder({route}) {
                 <View style={{backgroundColor : 'white', paddingHorizontal : 20,paddingVertical : 10, marginVertical : 2}}>
                     <Text style={{fontWeight : 'bold', fontSize : 25, paddingBottom : 4, borderBottomWidth : 1, borderBottomColor : 'gray'}}>Customer details</Text>
                     <Text style={{ fontSize : 22}}>{item.shipping.first_name + ' ' + item.shipping.last_name}</Text>
-                    <Text style={{ fontSize : 20}}>{item.shipping.address_1 + ' ' + item.shipping.address_2}</Text>
+                    <Text style={{ fontSize : 20}}>{item.shipping.address_1 + ' ' + item.shipping.address_2 + ' ' + item.shipping.city + ' ' + item.shipping.state + ' ' + item.shipping.postcode + ' ' + item.shipping.country}</Text>
                 </View>
                 <View style={{backgroundColor : 'white', paddingHorizontal : 20,paddingVertical : 10, marginVertical : 4}}>
                     <Text style={{fontWeight : 'bold', fontSize : 20}}>{item.payment_method==='cod'?'Cash On Delivery' : 'UPI'}</Text>

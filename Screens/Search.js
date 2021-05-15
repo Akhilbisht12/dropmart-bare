@@ -17,7 +17,7 @@ export default function Search({navigation}) {
         setLoading(2)
         WooCommerce.get("products",{
             search : search,
-            per_page : 100
+            per_page : 200
         })
         .then((response) => {
             setProducts(response);

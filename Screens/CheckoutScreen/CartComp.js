@@ -14,8 +14,14 @@ const CartComp = ({item, removeFromCart, adjustItemQty, adjustItemMargin}) => {
         state?adjustItemQty(item.id, item.qty+1):adjustItemQty(item.id, item.qty-1)
     }
 
-    const handleMargin = (e) => {
-        console.log(e)
+    const handleMargin = (text) => {
+        var val = parseInt(text)
+        var max = String(item.regular_price*item.qty)
+        if(val>max){
+            adjustItemMargin(item.id, max)
+        }else {
+            adjustItemMargin(item.id, text)
+        }
     }
 
     return (
@@ -45,17 +51,17 @@ const CartComp = ({item, removeFromCart, adjustItemQty, adjustItemMargin}) => {
                 </View>
             </View>
             
-            <View style={styles.marginView}>
+            {/* <View style={styles.marginView}>
                 <Text style={styles.textBd}>Final Customer Price : </Text>
                 <View style={styles.marginView}>
                     <Text style={styles.textBd}>₹</Text>
-                    <TextInput value={item.final_price} keyboardType='number-pad' onChangeText={e=>adjustItemMargin(item.id, e)} style={styles.marginInput}/>
+                    <TextInput value={item.final_price} keyboardType='number-pad' onChangeText={text=>handleMargin(text)} style={styles.marginInput}/>
                 </View>
             </View>
             <View style={styles.marginView}>
                 <Text style={styles.marginTxt}>Your Margin : </Text>
-                <Text style={[styles.marginTxt,{marginRight : 15}]}>₹ {(item.final_price-item.price)*item.qty}</Text>
-            </View>
+                <Text style={[styles.marginTxt,{marginRight : 15}]}>₹ {(item.final_price-(item.price*item.qty))}</Text>
+            </View> */}
         </View>
     )
 }
@@ -66,7 +72,7 @@ const styles = StyleSheet.create({
         padding : 10,
         backgroundColor : 'white',
         width : width-20,
-        borderRadius : 10,
+        borderRadius : 5,
         borderWidth : 1,
         borderColor : '#bcbcbc',
         marginVertical : 5

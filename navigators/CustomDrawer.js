@@ -11,10 +11,7 @@ const CustomDrawer = (props,deleteUser) => {
 
     const handleLogout = () => {
         AsyncStorage.clear()
-        .then((response)=>{
-            console.log(response);
-            props.navigation.navigate('Login')
-        })
+        props.navigation.navigate('Login')
     }
 
     return (

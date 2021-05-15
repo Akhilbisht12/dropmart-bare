@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as actionTypes from './User-Types';
 
 const INITIAL_STATE = {
@@ -31,6 +30,16 @@ const UserReducer = (state = INITIAL_STATE, action) => {
             ...state,
             shipping : [...state.shipping, action.payload.shipping]
         }
+
+        case actionTypes.UPDATE_SHIPPING : 
+        let newShip = [...state.shipping]
+        newShip[action.payload.key] = action.payload.updateShip
+        console.log(state.shipping[action.payload.key]);
+        return {
+            ...state,
+            shipping : newShip
+        }
+        
         case actionTypes.DELETE_SHIPPING : 
         return {
             ...state,
@@ -39,8 +48,6 @@ const UserReducer = (state = INITIAL_STATE, action) => {
 
         case actionTypes.DELETE_USER : 
         console.log('user deleted')
-        console.log(AsyncStorage.getItem('persist'))
-        AsyncStorage.removeItem('persist:root')
         return INITIAL_STATE
 
         case actionTypes.EDIT_USER : 

@@ -11,6 +11,8 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
     const [show, setShow] = useState(false)
     const [billing, setBilling] = useState(0);
 
+    
+    
     const styles = StyleSheet.create({
         main : {
             flex : 1,
@@ -80,7 +82,7 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
             <View style={styles.main}>
                 <View style={styles.showAddress}>
                     <TitleHeader title='My Addresses'/>
-                    <ScrollView style={styles.scroll}>
+                    <ScrollView keyboardShouldPersistTaps={'handled'} keyboardDismissMode={'on-drag'} style={styles.scroll}>
                         {shipping.map((item,i)=>{
                             return(
                                 <View key={item.address_1+Math.floor(Math.random()*100)} style={styles.addList}>
@@ -90,9 +92,9 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
                                         <Text style={styles.subText}>+91 {item.phone}</Text>
                                     </TouchableOpacity>
                                     <View style={[styles.btnView,{justifyContent : 'flex-start'}]}>
-                                        {/* <TouchableOpacity style={[styles.btn,{backgroundColor : '#c60607'}]}>
+                                        <TouchableOpacity onPress={()=>navigation.navigate('EditBilling', {index : i})} style={[styles.btn,{backgroundColor : '#c60607', marginHorizontal : 5}]}>
                                             <Text style={[styles.btnText,{color : 'white'}]}>Edit</Text>
-                                        </TouchableOpacity> */}
+                                        </TouchableOpacity>
                                         <TouchableOpacity onPress={()=>deleteShipping(item.id)} style={[styles.btn]}>
                                             <Text style={[styles.btnText,{color : '#c60607'}]}>Delete</Text>
                                         </TouchableOpacity>
@@ -114,7 +116,7 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
                     <View style={[styles.btnView]}>
                         <TouchableOpacity
                             onPress={()=>setShow(!show)}
-                        style={[styles.btn, {backgroundColor : '#c60607',width : width*0.45}]}>
+                            style={[styles.btn, {backgroundColor : '#c60607',width : width*0.45}]}>
                             <Text style={[styles.btnText, {color : 'white'}]}>Add New Address</Text>
                         </TouchableOpacity>
                         {route.params.parent==='cart'
@@ -146,7 +148,7 @@ const mapStateToProps = (state)=> {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        deleteShipping : (id) => dispatch(deleteShipping(id))
+        deleteShipping : (id) => dispatch(deleteShipping(id)),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Address)

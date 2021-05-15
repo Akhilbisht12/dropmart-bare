@@ -12,7 +12,7 @@ const Featured = () => {
     useEffect(() => {
         WooCommerce.get('products', {featured : true})
         .then(response=>{
-            console.log(response)
+            // console.log(response)
             setData(response)
             setLoading(false)
         })

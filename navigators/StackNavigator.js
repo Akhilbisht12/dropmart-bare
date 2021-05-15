@@ -28,6 +28,7 @@ import PhoneAuth from "../Screens/Auth/PhoneAuth";
 import PhoneToWoo from "../Screens/Auth/PhoneToWoo";
 import ForgotPassword from "../Screens/Auth/ForgotPassword";
 import Profile from '../Screens/MyAccount/Profile'
+import EditBilling from "../Screens/MyAccount/EditBilling";
 
 const data = {
   screenOne : {
@@ -72,9 +73,9 @@ function ScreenOne(){
 }
 
 
-const StackNavigator = ({profile, billing, wishlist}) => {
+const StackNavigator = ({profile, shipping, wishlist}) => {
 
-  console.log(billing)
+  // console.log(shipping)
   const Stack = createStackNavigator();
   // const [initialRoute, setInitialRoute] = useState('');
   // useEffect(()=>{
@@ -92,7 +93,7 @@ const StackNavigator = ({profile, billing, wishlist}) => {
 // if(loading) return<ActivityIndicator/>
 // else{
     return (
-      <Stack.Navigator initialRouteName={profile.email?'Home':'PhoneAuth'} headerMode='none'>
+      <Stack.Navigator initialRouteName={profile.email?'Home':'Signup'} headerMode='none'>
         <Stack.Screen name='ScreenOne' component={ScreenOne}/>
         <Stack.Screen name='ScreenTwo' component={ScreenTwo}/>
         <Stack.Screen name='ScreenThree' component={ScreenThree}/>
@@ -118,6 +119,7 @@ const StackNavigator = ({profile, billing, wishlist}) => {
         <Stack.Screen name="PhoneAuth" component={PhoneAuth} />
         <Stack.Screen name="PhoneToWoo" component={PhoneToWoo} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="EditBilling" component={EditBilling} />
       </Stack.Navigator>
     )
   }

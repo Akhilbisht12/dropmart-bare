@@ -17,7 +17,7 @@ export default function CatProducts({route}) {
     useEffect(()=>{
         WooCommerce.get('products', {
             category : item.id,
-            per_page : 20,
+            per_page : 200,
             page : page
         })
         .then(res=>{

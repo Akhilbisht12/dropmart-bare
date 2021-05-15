@@ -12,7 +12,7 @@ const CategoryBooks = ({id,name}) => {
     useEffect(()=>{
         WooCommerce.get("products", {
             category : id,
-            per_page : 6
+            per_page : 10
         })
         .then((response) => {
             // console.log(response);

@@ -5,7 +5,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 
-const TitleHeader = ({title, wishlist, cart}) => {
+const TitleHeader = ({title, cart}) => {
     const [counter, setCounter] = useState(0)
     useEffect(() => {
         let count = 0;
@@ -28,8 +28,6 @@ const TitleHeader = ({title, wishlist, cart}) => {
                     <Ionicon style={styles.icon} name='search-outline'/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>navigation.navigate('Wishlist')}>
-                <Text
-                    style={{position : 'absolute', top : 0, right : 0, backgroundColor : 'white', paddingHorizontal : 5, borderRadius : 10, color : '#c60607'}}>{wishlist.length}</Text>
                     <Ionicon style={styles.icon} name='heart-outline'/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>navigation.navigate('Cart')}>
@@ -65,7 +63,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         cart : state.cart.cart,
-        wishlist : state.wishlist.wishlist
     }
 }
 

@@ -32,26 +32,26 @@ const MyOrders = ({navigation, profile}) => {
     const identifyStatus = (status) =>{
         switch (status) {
             case 'pending':
-                return {text : 'Placed'}
+                return {text : 'Placed', value : 1}
             case 'processing':
-                return {text : 'Accepted'}
+                return {text : 'Accepted', value : 2}
             case 'on-hold':
-                return {text : 'Packed'}
+                return {text : 'Packed', value : 3}
             case 'failed':
-                return {text : 'Shipped'}
+                return {text : 'Shipped', value : 4}
             case 'completed':
-                return {text : 'Delivered'}
+                return {text : 'Delivered', value : 5}
             case 'refunded':
-                return {text : 'Payout'}
+                return {text : 'Payout', value : 6}
             case 'cancelled':
-                return {text : 'Cancelled'}
+                return {text : 'Cancelled', value : 7}
             default:
         }
     }
 
     const OrderComp = ({item}) => {
         return(
-            <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('SingleOrder', {item})}>
+            <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('SingleOrder', {item, status : identifyStatus(item.status)})}>
                 <View style={styles.order}>
                     <View style={styles.in}>
                         <Text style={styles.txt}>Order ID</Text>

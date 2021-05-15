@@ -34,8 +34,12 @@ export default function Home() {
                     <Brands/>
                 </View> */}
                 <CategoryBooks id={38} name='Book Combos'/>
-                <FlatCarousel start={2} height={150}/>
+                <FlatCarousel start={4} height={150}/>
                 <CategoryBooks id={73} name='Fiction Books'/>
+                <FlatCarousel start={6} height={150}/>
+                <CategoryBooks id={74} name='Non Fiction Books'/>
+                <FlatCarousel start={8} height={150}/>
+                <CategoryBooks id={75} name='Children Books'/>
 
                 </ScrollView>
             </SafeAreaView>

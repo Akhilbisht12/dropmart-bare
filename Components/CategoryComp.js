@@ -32,10 +32,12 @@ const CategoryComp = () => {
                 {cat.map((item, i)=>{
                     if(item.name!=='banners' &&item.name!=='Business Books' && item.name!=='Uncategorized' && i<6)
                     return(
-                        <View key={item.id} style={{margin : 4, alignItems : 'center', width : width*0.45}}>
-                            <Image style={{width : width*0.45, height : width*0.45, borderRadius : 5}} source={{uri : item.image.src}}/>
-                            <Text style={{textAlign : 'center', fontSize : 18, marginVertical : 5}}>{item.name}</Text>
-                        </View>
+                        <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('CatProducts',{item : {id : item.id, name : item.name}})}>
+                            <View key={item.id} style={{margin : 4, alignItems : 'center', width : width*0.45}}>
+                                <Image style={{width : width*0.45, height : width*0.45, borderRadius : 5}} source={{uri : item.image.src}}/>
+                                <Text style={{textAlign : 'center', fontSize : 18, marginVertical : 5}}>{item.name}</Text>
+                            </View>
+                        </TouchableOpacity>
                     )
                 })}
             </View>

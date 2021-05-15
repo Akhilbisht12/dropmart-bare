@@ -32,7 +32,7 @@ const PhoneAuth = ({navigation}) => {
     }
   
     if(loading) return <Loader/>
-    if (confirm) {
+    if (!confirm) {
       return (
           <ScrollView style={{flex : 1, backgroundColor : 'white'}}>
               <View style={{ alignItems : 'center', height : height-50, justifyContent : 'space-evenly'}}>
