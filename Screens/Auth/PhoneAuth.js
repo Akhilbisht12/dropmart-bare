@@ -16,17 +16,15 @@ const PhoneAuth = ({navigation}) => {
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
       setLoading(true)
-      console.log(phoneNumber)
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
       setConfirm(confirmation);
       setLoading(false)
     }
   
     async function confirmCode() {
-        console.log(code)
       try {
-        await confirm.confirm(code);
-        navigation.navigate('PhoneToWoo', {phone : phone})
+        const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
+        navigation.navigate('PhoneToWoo', {phone})
       } catch (error) {
         console.log(error)
         alert('Invalid code.');
@@ -34,25 +32,26 @@ const PhoneAuth = ({navigation}) => {
     }
   
     if(loading) return <Loader/>
-    if (!confirm) {
+    if (confirm) {
       return (
           <ScrollView style={{flex : 1, backgroundColor : 'white'}}>
-              <View style={{ alignItems : 'center', height : height, justifyContent : 'space-evenly'}}>
+              <View style={{ alignItems : 'center', height : height-50, justifyContent : 'space-evenly'}}>
                   <Ionicons size={80} color='#c60607' name='chatbox'/>
                   <View style={{alignItems : 'center'}}>
                     <Text style={{fontSize : 30, fontWeight : 'bold'}}>Mobile Verification</Text>
                     <Text style={{fontSize : 20}}>Please Enter Your Mobile Number</Text>
-                    <View style={{flexDirection : 'row', justifyContent : 'center', alignItems : 'center'}}>
-                        <Text style={{fontSize : 25}}>+91</Text>
+                    <View style={{flexDirection : 'row', justifyContent : 'center', alignItems : 'center', borderBottomColor : '#c60607', borderBottomWidth : 1, marginVertical : 20}}>
+                        <Text style={{fontSize : 25, borderWidth : 1, borderRadius : 5, paddingVertical : 2, paddingHorizontal : 5, borderColor : '#c60607', color : '#c60607'}}>+91</Text>
                         <TextInput
                         onChangeText={setPhone}
                         placeholder='XXXXXXXXXX'
+                        placeholderTextColor='#c60607'
                         maxLength={10}
-                        style={{borderBottomWidth : 1, borderRadius : 5, marginVertical : 20, width : width*0.6, height : 50, fontSize : 25}}/>
+                        style={{ width : width*0.6, height : 50, fontSize : 25, letterSpacing : 10, color : '#c60607'}}/>
                     </View>
                   </View>
                 
-                <TouchableOpacity style={{backgroundColor : '#c60607', borderRadius : 25, padding : 5}} onPress={()=>signInWithPhoneNumber(`+91 ${phone}`)}>
+                <TouchableOpacity style={{backgroundColor : '#c60607', borderRadius : 25, paddingHorizontal : 8, paddingVertical : 6}} onPress={()=>signInWithPhoneNumber(`+91 ${phone}`)}>
                     <Ionicons size={35} color='white' name='chevron-forward'/>
                 </TouchableOpacity>
               </View>
@@ -64,21 +63,23 @@ const PhoneAuth = ({navigation}) => {
     return (
       <View style={{flex : 1, backgroundColor : 'white'}}>
           <View style={{flex : 2}}>
-            <TouchableOpacity onPress={()=>setConfirm(null)}>
+            <TouchableOpacity style={{marginVertical : 10, marginHorizontal : 5}} onPress={()=>setConfirm(null)}>
                 <Ionicons name='chevron-back' size={30} />
             </TouchableOpacity>
-              <View style={{flex : 2,alignItems : 'center', justifyContent : 'space-evenly'}}>
-                <Ionicons name='chatbox' size={80} color="#c60607" />
-                <View style={{alignItems : 'center'}}>
-                    <Text style={{fontSize : 30, fontWeight : 'bold', marginVertical : 20}}>Enter Otp</Text>
+              <View style={{flex : 2,alignItems : 'center', justifyContent : 'center'}}>
+                <Ionicons name='chatbox' size={80} color="#c60607" style={{marginVertical : 10}}/>
+                <View style={{alignItems : 'center', marginVertical : 15,}}>
+                    <Text style={{fontSize : 30, fontWeight : 'bold', marginVertical : 20}}>Enter OTP</Text>
                     <Text style={{textAlign : 'center', fontSize : 18}}>We have sent you access code via SMS for Mobile Number Verification</Text>
                 </View>
                 <TextInput
-                style={{borderBottomWidth : 1, fontSize : 25, width : width*0.5, textAlign : 'center'}}
-                value={code} 
+                style={{borderBottomWidth : 1, marginVertical : 15, fontSize : 25, width : width*0.5, textAlign : 'center', borderBottomColor : '#c60607', letterSpacing : 5, color : '#c60607'}}
+                value={code}
+                placeholder='Enter Code'
+                placeholderTextColor='#c60607'
                 onChangeText={setCode} />
                 <TouchableOpacity
-                style={{backgroundColor : '#c60607', padding : 5, borderRadius : 25}}
+                style={{backgroundColor : '#c60607', marginVertical : 15, paddingVertical : 6, paddingHorizontal : 8, borderRadius : 25}}
                 onPress={()=>confirmCode()}>
                     <Icon name='chevron-forward' size={35} color='white'/>
                 </TouchableOpacity>

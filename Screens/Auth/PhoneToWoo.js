@@ -5,7 +5,8 @@ import Loader from '../../Components/Loader'
 import TitleHeader from '../../Components/TitleHeader'
 import WooCommerce from '../../Components/WooCommerce'
 import Axios from 'axios'
-import { addBilling, addUser, editUser } from '../../Redux/User/User-Action'
+import { addBilling, addUser, editUser } from '../../Redux/User/User-Action';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 const {width, height} = Dimensions.get('window')
 
 
@@ -29,7 +30,7 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
     const [first_name, set_first_name] = useState('');
     const [last_name, set_last_name] = useState('');
     const [email, set_Email] = useState('');
-    const [phone, set_phone] = useState('');
+    const [phone, set_phone] = useState(route.params.phone);
     const [address_1, set_address_1] = useState('');
     const [address_2, set_address_2] = useState('');
     const [city, set_city] = useState('');
@@ -127,8 +128,11 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
     if(step===0){
         return(
             <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
-                <TextInput value={email} onChangeText={set_Email} placeholder='Email Address' style={[styles.input]}/>
-                <TouchableOpacity onPress={()=>{FindUser()}} style={[styles.btn, {backgroundColor : 'red',width : width*0.9}]}>
+                <Ionicons name='book' color='#c60607' size={100} style={{marginVertical : 10}} />
+                <Text style={{fontSize : 30, fontWeight : 'bold', marginVertical : 10}}>Help Us Find You</Text>
+                <Text style={{textAlign : 'center', width : width-100, marginVertical : 10}}>Enter your email address so we can make sure you are a registered user or not.</Text>
+                <TextInput value={email} onChangeText={set_Email} placeholder='Email Address' style={[styles.input, {marginVertical : 10}]}/>
+                <TouchableOpacity onPress={()=>{FindUser()}} style={[styles.btn, {backgroundColor : '#c60607',width : width*0.9, marginVertical : 10}]}>
                     <Text style={[styles.btnText, {color : 'white'}]}>Continue</Text>
                 </TouchableOpacity>
             </View>
@@ -136,25 +140,25 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
     }
     return (
         <View style={styles.main}>
-            <TitleHeader title='Personal Details'/>
             <ScrollView style={styles.scroll}>
                 <View style={styles.scrollView}>
+                    <Ionicons name='book' size={100} color='#c60607'/>
+                    <Text style={{fontSize : 30, fontWeight : 'bold', marginVertical : 10}}>Great to have you !!</Text>
+                    <Text style={{textAlign : 'center', width : width-100, marginVertical : 10}}>Enter you name and lets get started</Text>
                     <TextInput value={first_name} onChangeText={set_first_name} placeholder='First Name' style={[styles.input]}/>
                     <TextInput value={last_name} onChangeText={set_last_name} placeholder='Last Name' style={[styles.input]}/>
-                    <TextInput value={phone} onChangeText={set_phone} placeholder='Mobile Number' style={[styles.input]}/>
-                    <TextInput value={address_1} onChangeText={set_address_1} placeholder='House No' style={[styles.input]}/>
-                    <TextInput value={address_2} onChangeText={set_address_2} placeholder='Street / Lane / Locality' style={[styles.input]}/>
-                    <TextInput value={city} onChangeText={set_city} placeholder='City' style={[styles.input]}/>
-                    <TextInput value={pincode} onChangeText={set_pincode} placeholder='Pincode' style={[styles.input]}/>
-                    <TextInput value={state} onChangeText={set_state} placeholder='State' style={[styles.input]}/>
-                    <TextInput value={country} onChangeText={set_country} placeholder='Country' style={[styles.input]}/>
+                    {/* <TextInput value={phone} onChangeText={set_phone} placeholder='Mobile Number' style={[styles.input]}/> */}
+                    {/* <TextInput value={address_1} onChangeText={set_address_1} placeholder='House No' style={[styles.input]}/> */}
+                    {/* <TextInput value={address_2} onChangeText={set_address_2} placeholder='Street / Lane / Locality' style={[styles.input]}/> */}
+                    {/* <TextInput value={city} onChangeText={set_city} placeholder='City' style={[styles.input]}/> */}
+                    {/* <TextInput value={pincode} onChangeText={set_pincode} placeholder='Pincode' style={[styles.input]}/> */}
+                    {/* <TextInput value={state} onChangeText={set_state} placeholder='State' style={[styles.input]}/> */}
+                    {/* <TextInput value={country} onChangeText={set_country} placeholder='Country' style={[styles.input]}/> */}
+                    <TouchableOpacity onPress={()=>{handleUserSave()}} style={[styles.btn, {backgroundColor : '#c60607',width : width*0.9, marginVertical : 10}]}>
+                        <Text style={[styles.btnText, {color : 'white'}]}>Continue</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
-            <View style={styles.btnView}>
-                <TouchableOpacity onPress={()=>{handleUserSave()}} style={[styles.btn, {backgroundColor : 'red',width : width*0.9}]}>
-                    <Text style={[styles.btnText, {color : 'white'}]}>Save</Text>
-                </TouchableOpacity>
-            </View>
         </View>
     )
 }
@@ -165,10 +169,13 @@ const styles = StyleSheet.create({
         backgroundColor : 'white'
     },
     scroll : {
-        flex : 1
+        flex : 1,
     },
     scrollView : {
-        alignItems : 'center'
+        alignItems : 'center',
+        justifyContent : 'center',
+        height : height-100
+
     },
     input : {
         borderWidth : 1,
@@ -178,15 +185,6 @@ const styles = StyleSheet.create({
         borderColor : 'grey',
         paddingVertical : 5,
         paddingHorizontal : 5
-    },
-    btnView : {
-        display : 'flex',
-        flexDirection : 'row',
-        alignItems : 'center',
-        justifyContent : 'space-evenly',
-        borderTopWidth : 1,
-        paddingVertical : 5,
-        borderTopColor : 'grey'
     },
     btn : {
         borderWidth : 1,

@@ -92,7 +92,7 @@ const StackNavigator = ({profile, billing, wishlist}) => {
 // if(loading) return<ActivityIndicator/>
 // else{
     return (
-      <Stack.Navigator initialRouteName={profile.email?'Home':'Signup'} headerMode='none'>
+      <Stack.Navigator initialRouteName={profile.email?'Home':'PhoneAuth'} headerMode='none'>
         <Stack.Screen name='ScreenOne' component={ScreenOne}/>
         <Stack.Screen name='ScreenTwo' component={ScreenTwo}/>
         <Stack.Screen name='ScreenThree' component={ScreenThree}/>
