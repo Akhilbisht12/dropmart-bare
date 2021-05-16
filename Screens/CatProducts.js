@@ -17,10 +17,12 @@ export default function CatProducts({route}) {
     useEffect(()=>{
         WooCommerce.get('products', {
             category : item.id,
-            per_page : 200,
+            per_page : 100,
             page : page
         })
         .then(res=>{
+            // console.log('cat response')
+            // console.log(res)
             if(res.length!==0){
                 setProducts(res);
             }else Alert.alert('Product Message', 'You have browsed all products')

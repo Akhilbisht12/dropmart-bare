@@ -10,10 +10,12 @@ import CustomerInfo from './CustomerInfo';
 import RazorpayCheckout from 'react-native-razorpay';
 import { emptyCart } from '../../Redux/Cart/Cart-Action';
 import Loader from '../../Components/Loader';
+import { max } from 'react-native-reanimated';
 
 const OrderSummary = ({cart, billing, route, shipping, profile, navigation, emptyCart}) => {
     console.log(route.params.index)
     const [productTotal, setProductTotal] = useState();
+    const [subTotal, setSubTotal] = useState();
     const [discount, setDiscount] = useState(0);
     const [maxPrice, setMaxPrice] = useState();
     const [margin, setMargin] = useState(0);
@@ -34,16 +36,28 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             maxprice += item.regular_price*item.qty;
         })
         setProductTotal(price);
-        setMargin(price)
         setMaxPrice(maxprice);
+        price<199?setMaxPrice(maxprice+49):setMaxPrice(maxprice)
+        price<199?setSubTotal(price+49):setSubTotal(price)
+        price<199?setMargin(price+49):setMargin(price)
 
     },[cart, productTotal, setProductTotal]);
+
+    useEffect(()=>{
+        isGift?setSubTotal(subTotal+75):setSubTotal(subTotal-75)
+        isGift?setMargin(subTotal+75):setMargin(subTotal-75)
+        isGift?setMaxPrice(maxPrice+75):setMaxPrice(maxPrice-75)
+    },[isGift, setGift])
+
+    useEffect(()=>{
+        setSubTotal(subTotal-discount)
+    },[discount])
 
     const handleCoupon = () => {
         WooCommerce.get("coupons",{code : coupon})
         .then((response) => {
            response.length === 0 ?ToastAndroid.show('No such Coupon Code', ToastAndroid.SHORT): setOff(response[0].amount); ToastAndroid.show('Coupon added', ToastAndroid.SHORT)
-           setDiscount((productTotal*response[0].amount)/100)
+           setDiscount(parseInt((productTotal*response[0].amount)/100))
         })
         .catch((error) => {
             console.log(error);
@@ -78,7 +92,10 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             shipping: shipping[route.params.index],
             line_items: list,
             fee_lines : fee_lines,
-            shipping_lines: shipping_lines
+            shipping_lines: shipping_lines,
+            coupon_lines : [
+                {code : coupon}
+            ]
           };
           
           WooCommerce.post("orders", data)
@@ -114,7 +131,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             image: 'https://dropmarts.com/wp-content/uploads/2021/05/dropmart-logo.jpeg',
             currency: 'INR',
             key: 'rzp_live_nPynaXuvHFfPoS',
-            amount: `${(isGift?margin+75-discount:margin-discount)*100}`,
+            amount: `${parseInt(margin*100)}`,
             name: 'DropMart',
             prefill: {
               email: `${profile.email}`,
@@ -137,10 +154,10 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     }
 
     const CompleteOrder = () => {
-        if(margin<productTotal){
-            ToastAndroid.show('Margin cannbot be below Product Total', ToastAndroid.SHORT)
+        if(margin<subTotal){
+            ToastAndroid.show('Margin cannot be below Total Amount', ToastAndroid.SHORT)
         }else if(margin>maxPrice){
-            ToastAndroid.show('Margin cannbot be above MRP', ToastAndroid.SHORT)
+            ToastAndroid.show('Margin cannot be above MRP', ToastAndroid.SHORT)
         }else{
             isOnline?handleRazorPay():order()
         }
@@ -204,29 +221,29 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                             <Text>{productTotal>199?0:49}</Text>
                         </View>
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
-                            <Text>Coupon Discount</Text>
-                            <Text>{off}%</Text>
-                        </View>
-                        <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
                             <Text>Gift Pack Charges</Text>
                             <Text>{isGift?75:0}</Text>
                         </View>
-                        <View style={styles.flexBetween}>
-                            <Text>Order Total</Text>
-                            <Text>{isGift?productTotal+75:productTotal}</Text>
+                        <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
+                            <Text>Coupon Discount</Text>
+                            <Text>{discount}</Text>
                         </View>
                         <View style={styles.flexBetween}>
-                            <Text>MRP Total</Text>
-                            <Text>{maxPrice}</Text>
+                            <Text>Order Total</Text>
+                            <Text>{subTotal}</Text>
+                        </View>
+                        <View style={styles.flexBetween}>
+                            <Text style={{textDecorationLine : 'line-through'}}>MRP Total</Text>
+                            <Text style={{textDecorationLine : 'line-through'}}>{maxPrice}</Text>
                         </View>
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
                             <Text style={{fontWeight : 'bold'}}>Final Customer Price</Text>
                             {/* <Text>{isGift?margin+75-discount:margin-discount}</Text> */}
-                            <TextInput style={{borderWidth : 1, height : 40, borderRadius : 5, width : 50}} value={margin} textContentType={Number} onChangeText={setMargin}/>
+                            <TextInput style={{borderWidth : 1, height : 40, borderRadius : 5, width : 50}} value={`${margin}`} onChangeText={setMargin}/>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={[styles.fontBd,{color : 'green'}]}>Margin Earned</Text>
-                            <Text style={[styles.fontBd,{color : 'green'}]}>{margin-productTotal}</Text>
+                            <Text style={[styles.fontBd,{color : 'green'}]}>{parseInt(margin-subTotal)}</Text>
                         </View>
                     </View>
                     <View style={[styles.colorCont]}>
@@ -241,7 +258,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                                     <Icon style={styles.icon} name='credit-card' size={20}/>
                                     <View>
                                         <Text style={{fontSize : 20}}>Online</Text>
-                                        <Text>Debit Card, Credit Cart, Net Banking, UPI</Text>
+                                        <Text style={{width : 250}}>Debit Card, Credit Cart, Net Banking, UPI</Text>
                                     </View>
                                 </View>
                                 <Icon name='check-circle' color={isOnline?'#c60607':'grey'} size={20}/>

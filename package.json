@@ -28,6 +28,7 @@
     "react-native": "~0.63.4",
     "react-native-flatlist-slider": "^1.0.5",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-global-props": "^1.1.5",
     "react-native-push-notification": "^7.3.0",
     "react-native-razorpay": "^2.2.4",
     "react-native-reanimated": "~2.1.0",

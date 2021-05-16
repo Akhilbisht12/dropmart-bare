@@ -11,7 +11,11 @@ const CartComp = ({item, removeFromCart, adjustItemQty, adjustItemMargin}) => {
     const [qty, setQty] = useState(1);
 
     const handleQuantityChange = (state)=>{
-        state?adjustItemQty(item.id, item.qty+1):adjustItemQty(item.id, item.qty-1)
+        if(item.qty===1){
+            state?adjustItemQty(item.id, item.qty+1):console.log('')
+        }else{
+            state?adjustItemQty(item.id, item.qty+1):adjustItemQty(item.id, item.qty-1)
+        }
     }
 
     const handleMargin = (text) => {

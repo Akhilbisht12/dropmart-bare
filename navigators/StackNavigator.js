@@ -73,9 +73,9 @@ function ScreenOne(){
 }
 
 
-const StackNavigator = ({profile, shipping, wishlist}) => {
+const StackNavigator = ({profile, billing, wishlist}) => {
 
-  // console.log(shipping)
+  console.log(billing)
   const Stack = createStackNavigator();
   // const [initialRoute, setInitialRoute] = useState('');
   // useEffect(()=>{

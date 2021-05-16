@@ -7,11 +7,11 @@ import WooCommerce from '../../Components/WooCommerce';
 import Loader from '../../Components/Loader';
 import Axios from 'axios';
 import { connect } from 'react-redux';
-import { addUser } from '../../Redux/User/User-Action';
+import { addBilling, addUser } from '../../Redux/User/User-Action';
 
 const {width, height} = Dimensions.get('window')
 
- const SignUp = ({navigation, addUser}) => {
+ const SignUp = ({navigation, addUser, addBilling}) => {
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
      const [first_name, set_first_name] = useState('');
@@ -21,57 +21,6 @@ const {width, height} = Dimensions.get('window')
      const [mobile, setMobile] = useState('');
      const [next, setNext] = useState(true);
      const [loading, setLoading] = useState(false);
-
-    //  const handleSignUp = ()=>{
-    //      setLoading(true);
-    //      if(name!='' && street!='' && flat!='' && landmark!='' &&mobile!=''){
-    //     const data = {
-    //         email: email,
-    //         first_name: name.split(' ')[0],
-    //         last_name: name.split(' ')[1],
-    //         username: name.split(' ')[0]+name.split(' ')[1] + Math.round(Math.random()*10000),
-    //         password : password,
-    //         billing: {
-    //           first_name: name.split(' ')[0],
-    //           last_name: name.split(' ')[1],
-    //           company: password,
-    //           address_1: flat,
-    //           address_2: street,
-    //           city: landmark,
-    //           state: "Uttrakhand",
-    //           postcode: "",
-    //           country: "India",
-    //           email: email,
-    //           phone: mobile
-    //         },
-    //         shipping: {
-    //           first_name: name.split(' ')[0],
-    //           last_name: name.split(' ')[1],
-    //           company: "",
-    //           address_1: flat,
-    //           address_2: street,
-    //           city: landmark,
-    //           state: "Uttrakhand",
-    //           postcode: "",
-    //           country: "India"
-    //         }
-    //       };
-          
-    //       WooCommerce.post("customers", data)
-    //         .then((response) => {
-    //             console.log(data)
-    //             console.log(response, response.data)
-    //           AsyncStorage.setItem('user', JSON.stringify(response));
-    //           AsyncStorage.setItem('cart', JSON.stringify([]));
-    //           navigation.navigate('ScreenOne');
-    //           setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //           setLoading(false);
-    //           alert('Something Went Wrong')
-    //         });
-    //     }
-    //  }
 
     const handleSignUp = () => {
         if(password!==confirm_password){
@@ -84,38 +33,37 @@ const {width, height} = Dimensions.get('window')
                 password
             })
             .then(response=>{
-                WooCommerce.get("customers",{email})
-                .then((wooresponse) => {
-                    WooCommerce.put(`customers/${wooresponse[0].id}`, {first_name, last_name})
-                    Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
-                        username : email,
-                        password : password
+                WooCommerce.get("customers", {email})
+                .then((wooget) => {
+                    WooCommerce.put(`customers/${wooget[0].id}`, {first_name, last_name, billing : {first_name, last_name}})
+                        .then(responsePut=>{
+                            console.log(responsePut.billing)
+                            Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
+                                username : email,
+                                password : password
+                            })
+                            .then(response=>{
+                                addUser({
+                                    id: wooget[0].id,
+                                    email: email,
+                                    first_name: first_name,
+                                    last_name: last_name,
+                                    token : response.data.token,
+                                    username: email,
+                                })
+                                addBilling(responsePut.billing)
+                                setLoading(false);
+                                navigation.navigate('Home')
+                            })
+                        })
                     })
-                    .then(response=>{
-                        addUser({
-                            id: wooresponse[0].id,
-                            email: email,
-                            first_name: first_name,
-                            last_name: last_name,
-                            token : response.data.token,
-                            username: email,
-                          })
-                    })
-                    
-                })
-                .catch((error) => {
-                    alert(error);
-                });
             })
             .catch(err=>{
-                alert(err)
-            })
-            .then(()=>{
+                ToastAndroid.show('User already registered with this email')
                 setLoading(false)
-                navigation.navigate('Home')
             })
-        } else{
-            alert('Fill Out Details')
+        }else{
+            ToastAndroid.show('Fill Out Details', ToastAndroid.SHORT)
         }
     }
 
@@ -221,7 +169,8 @@ const {width, height} = Dimensions.get('window')
 
  const mapDispatchToProps = (dispatch) => {
      return {
-         addUser : (user) => dispatch(addUser(user))
+         addUser : (user) => dispatch(addUser(user)),
+         addBilling : (billing) => dispatch(addBilling(billing))
      }
  }
 

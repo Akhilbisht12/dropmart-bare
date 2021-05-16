@@ -29,6 +29,7 @@ const AddAddress = ({Parent, addShipping}) => {
                 first_name,
                 last_name,
                 phone,
+                company : phone,
                 address_1,
                 address_2,
                 city,

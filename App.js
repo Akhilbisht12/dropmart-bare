@@ -5,8 +5,16 @@ import DrawerNavigator from './navigators/DrawerNavigator';
 import { Provider } from "react-redux";
 import {store, persistor} from "./Redux/Store";
 import { PersistGate } from 'redux-persist/lib/integration/react';
+import {setCustomText} from 'react-native-global-props'
 
 export default function App() {
+
+  setCustomText({
+    style : {
+      color : 'black',
+    }
+  })
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

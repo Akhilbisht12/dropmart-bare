@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, Linking } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Linking, ToastAndroid } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useSafeArea } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -51,14 +51,14 @@ const Login = ({navigation,addUser, addBilling}) => {
 
     const handleLogin = () => {
         setLoading(true)
-        Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
-            username : email,
-            password : password
-        })
-        .then(response=>{
-              WooCommerce.get("customers",{email})
-                .then((wooresponse) => {
-                    console.log(wooresponse)
+        WooCommerce.get("customers",{email})
+        .then((wooresponse) => {
+            if(wooresponse.length!==0){
+                Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
+                    username : email,
+                    password : password
+                    })
+                .then(response=>{
                     addUser({
                         id: wooresponse[0].id,
                         email: email,
@@ -66,21 +66,24 @@ const Login = ({navigation,addUser, addBilling}) => {
                         last_name: wooresponse[0].last_name,
                         token : response.data.token,
                         username: email,
-                      })
-                      console.log(wooresponse[0].billing)
+                        })
+                        console.log(wooresponse[0].billing)
                     addBilling(wooresponse[0].billing)
+                    setLoading(false);
+                    navigation.navigate('Home')
                 })
-                .catch((error) => {
-                    console.log(error.response);
-            });
+                .catch(err=>{
+                    ToastAndroid.show('You have entered the wrong password', ToastAndroid.SHORT)
+                    setLoading(false)
+                })
+            }else{
+                ToastAndroid.show('No Such Registered Email Found', ToastAndroid.SHORT)
+                setLoading(false)
+            }
         })
-        .catch(err=>{
-            alert(err.message)
-        })
-        .then(()=>{
-            setLoading(false)
-            navigation.navigate('Home')
-        })
+        .catch((error) => {
+            ToastAndroid.show(error, ToastAndroid.SHORT)
+        });
         
     }
 

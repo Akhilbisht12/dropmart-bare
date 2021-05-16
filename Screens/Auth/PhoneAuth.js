@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, TextInput ,Button, Image, ScrollView, Text, TouchableOpacity, Dimensions} from 'react-native'
+import { View, TextInput ,Button, Image, ScrollView, Text, TouchableOpacity, Dimensions, ToastAndroid} from 'react-native'
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -27,7 +27,7 @@ const PhoneAuth = ({navigation}) => {
         navigation.navigate('PhoneToWoo', {phone})
       } catch (error) {
         console.log(error)
-        alert('Invalid code.');
+        ToastAndroid.show('Invalid OTP', ToastAndroid.SHORT)
       }
     }
   

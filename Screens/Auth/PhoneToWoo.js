@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import Loader from '../../Components/Loader'
 import TitleHeader from '../../Components/TitleHeader'
@@ -12,10 +12,13 @@ const {width, height} = Dimensions.get('window')
 
 const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
     const [step, setStep] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const FindUser = () => {
+        setLoading(true)
         WooCommerce.get('Customers',{email})
         .then(response=>{
+            setLoading(false)
             console.log(response)
             if(response.length!==0){
                 handleSavedUser(response[0])
@@ -26,7 +29,6 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
         .catch(err=>console.log(err))
     }
 
-    const [loading, setLoading] = useState(false);
     const [first_name, set_first_name] = useState('');
     const [last_name, set_last_name] = useState('');
     const [email, set_Email] = useState('');
@@ -66,7 +68,6 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
         password : 'PhoneAuthUser'
         })
         .then(responseUP=>{
-            console.log(responseUP)
             WooCommerce.get("customers",{email})
             .then((wooresponse) => {
                 Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {
@@ -86,7 +87,7 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
                             token : responseIN.data.token,
                             username: email,
                           })
-                          alert('You are logged in successfully')
+                          ToastAndroid.show('You are logged in successfully', ToastAndroid.SHORT)
                           navigation.navigate('Home')
                           setLoading(false)
                     })
@@ -107,8 +108,6 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
             password : 'PhoneAuthUser'
         })
         .then(responseIN=>{
-            console.log(responseIN)
-            console.log(item)
             addUser({
                 id: item.id,
                 email: item.email,
@@ -118,7 +117,7 @@ const PhoneToWoo = ({addBilling,addUser, navigation,profile, route}) => {
                 username: item.username,
                 })
             addBilling(item.billing)
-            alert(`Welcome back ${item.first_name} ${item.last_name} !`)
+            ToastAndroid.show(`Welcome back ${item.first_name} ${item.last_name} !`, ToastAndroid.SHORT)
             navigation.navigate('Home')
             setLoading(false)
             })

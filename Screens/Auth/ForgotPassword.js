@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, Dimensions, TouchableOpacity, ToastAndroid } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Axios from 'axios'
 import Loader from '../../Components/Loader'
 const {width, heigth} = Dimensions.get('window')
 
-const ForgotPassword = () => {
+const ForgotPassword = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [loading, setloading] = useState(false);
 
@@ -16,8 +16,13 @@ const ForgotPassword = () => {
         })
         .then(response=>{
             setloading(false)
-            alert(response.data.messsage)
-            console.log(response.data.message)
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT)
+            navigation.navigate('Login')
+        })
+        .catch(err=>{
+            console.log(err)
+            setloading(false)
+            ToastAndroid.show('No registered user found with this email.')
         })
     }
 
