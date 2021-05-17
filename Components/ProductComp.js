@@ -169,7 +169,7 @@ const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFr
                 <View>
                     <View>
                         <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
-                            {item.categories?<Text style={styles.cat}>{item.categories[0].name}</Text>:console.log('no category')}
+                            {item.categories[0]?<Text style={styles.cat}>{item.categories[0].name}</Text>:console.log('no category')}
                             <TouchableOpacity onPress={()=>handleWishlist()} style={styles.wishlist}>
                                 <Ionicon name={inWish?'heart':'heart-outline'} color='#C60607' size={30}/>
                             </TouchableOpacity>

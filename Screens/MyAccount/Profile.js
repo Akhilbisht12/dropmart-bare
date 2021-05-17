@@ -25,7 +25,9 @@ const Profile = ({profile, billing, editBilling}) => {
         const data = {
             first_name,
             last_name,
+            email,
             billing: {
+                email,
                 first_name,
                 last_name,
                 phone,
@@ -39,6 +41,7 @@ const Profile = ({profile, billing, editBilling}) => {
             .then((response) => {
               console.log(response);
               editBilling({
+                  email : email,
                   first_name : first_name,
                   last_name : last_name,
                   phone : phone,

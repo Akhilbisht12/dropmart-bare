@@ -22,10 +22,12 @@ export default function CatProducts({route}) {
         })
         .then(res=>{
             // console.log('cat response')
-            // console.log(res)
+            console.log(res.length)
             if(res.length!==0){
                 setProducts(res);
-            }else Alert.alert('Product Message', 'You have browsed all products')
+            }else{
+                Alert.alert('Product Message', 'You have browsed all products')
+            }
             setLoading(false)
         })
     },[page])

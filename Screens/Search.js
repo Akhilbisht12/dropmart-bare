@@ -17,14 +17,15 @@ export default function Search({navigation}) {
         setLoading(2)
         WooCommerce.get("products",{
             search : search,
-            per_page : 200
+            per_page : 100
         })
         .then((response) => {
+            console.log(response)
             setProducts(response);
             setLoading(3);
         })
         .catch((error) => {
-            console.log(error.response);
+            console.log(error);
         });
     }
 

@@ -35,7 +35,7 @@ const {width, height} = Dimensions.get('window')
             .then(response=>{
                 WooCommerce.get("customers", {email})
                 .then((wooget) => {
-                    WooCommerce.put(`customers/${wooget[0].id}`, {first_name, last_name, billing : {first_name, last_name}})
+                    WooCommerce.put(`customers/${wooget[0].id}`, {first_name, last_name, email, billing : {first_name, last_name, email}})
                         .then(responsePut=>{
                             console.log(responsePut.billing)
                             Axios.post('https://dropmarts.com/wp-json/jwt-auth/v1/token', {

@@ -37,7 +37,7 @@ export default function SingleOrder({route}) {
         if(item.status==='pending' || item.status=== 'on-hold' || item.status === 'processing'){
             return(
                 <TouchableOpacity onPress={()=>handleCancelOrder()}>
-                    <Text style={[styles.btn, {backgroundColor : '#ff3300'}]}>Cancel Order</Text>
+                    <Text style={[styles.btn, {backgroundColor : '#c60607'}]}>Cancel Order</Text>
                 </TouchableOpacity>
             )
         }

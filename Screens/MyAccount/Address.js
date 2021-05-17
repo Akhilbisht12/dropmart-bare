@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import TitleHeader from '../../Components/TitleHeader'
 import { deleteShipping } from '../../Redux/User/User-Action'
 import AddAddress from './AddAddress'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 const {width, height} = Dimensions.get('window')
 
 const Address = ({shipping, route, navigation, deleteShipping}) => {
@@ -99,16 +100,11 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
                                             <Text style={[styles.btnText,{color : '#c60607'}]}>Delete</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={{
+                                    <Ionicons name={billing==i?'checkmark-circle':'checkmark-circle-outline'} color={billing===i?'#c60607':'black'} size={20} style={{
                                         position : 'absolute',
-                                        backgroundColor : billing===i?'#c60607':'white',
-                                        padding : 10,
                                         right : 10,
                                         top : 20,
-                                        borderColor : '#c60607',
-                                        borderWidth : 1,
-                                        borderRadius : 10,
-                                    }}></View>
+                                    }}/>
                                 </View>
                             )
                         })}                        
@@ -120,8 +116,8 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
                             <Text style={[styles.btnText, {color : 'white'}]}>Add New Address</Text>
                         </TouchableOpacity>
                         {route.params.parent==='cart'
-                        ?<TouchableOpacity onPress={()=>navigation.navigate('Summary',{index:billing})} style={[styles.btn, {width : width*0.45}]}>
-                            <Text style={[styles.btnText, {color : '#c60607'}]}>Proceed</Text>
+                        ?<TouchableOpacity onPress={()=>navigation.navigate('Summary',{index:billing})} style={[styles.btn, {width : width*0.5}]}>
+                            <Text style={[styles.btnText, {color : '#c60607'}]}>Proceed To Add Margin</Text>
                         </TouchableOpacity>
                         :console.log('')}
                     </View>

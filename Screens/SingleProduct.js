@@ -90,7 +90,10 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                         <View style={{width : width, backgroundColor : 'white', padding : 10}}>
                             <Text style={{fontSize : 18, marginHorizontal : 10}}>{item.name}</Text>
                             <View style={{flexDirection : 'row', justifyContent : 'space-between'}}>
-                                <Text style={{fontSize : 22, fontWeight : 'bold', marginHorizontal : 10}}>₹ {item.regular_price}</Text>
+                                <View>
+                                    <Text style={{fontSize : 22, fontWeight : 'bold', marginHorizontal : 10}}>₹ {item.price}</Text>
+                                    <Text style={{fontSize : 18, marginHorizontal : 10,marginVertical : 5, textDecorationLine : 'line-through'}}>₹ {item.regular_price}</Text>
+                                </View>
                                 <TouchableOpacity onPress={()=>{
                                     addToWishlist(cartItem)
                                     ToastAndroid.show("Added to whishlist", ToastAndroid.SHORT);
@@ -110,6 +113,14 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                             <View style={styles.flexStart}>
                                 <Ionicons style={styles.icon} name='cube' size={20}/>
                                 <Text> Dispatch in 2-3 days</Text>
+                            </View>
+                            <View style={styles.flexStart}>
+                                <Ionicons style={styles.icon} name='albums' size={20}/>
+                                {item.tags.map((tag)=>{
+                                    return (
+                                        <Text style={{marginHorizontal : 3, fontWeight : 'bold', borderRightWidth : 1, paddingHorizontal : 3}} key={tag.id}>{tag.name}</Text>
+                                    )
+                                })}
                             </View>
                         </View>
                         <View style={styles.productDetails}>

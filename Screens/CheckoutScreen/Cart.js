@@ -12,6 +12,14 @@ const Cart = ({cart}) => {
     const [access, setaccess] = useState(true)
     const navigation = useNavigation()
     
+    const handleCheckout = () => {
+        if(cart.length===0){
+            ToastAndroid.show('Add products in cart to checkout', ToastAndroid.SHORT)
+        }else {
+            navigation.navigate('Address', {parent : 'cart'})
+        }
+    }
+
     return (
         <View style={styles.main}>
             <TitleHeader title='Cart'/>
@@ -28,7 +36,7 @@ const Cart = ({cart}) => {
                 </View>
             </ScrollView>
             <View style={styles.payView}>
-                <TouchableOpacity style={styles.payBtn} onPress={()=>navigation.navigate('Address', {parent : 'cart'})}>
+                <TouchableOpacity style={styles.payBtn} onPress={()=>handleCheckout()}>
                     <Text style={{color : 'white', fontSize : 20, textAlign : 'center'}}>Checkout</Text>
                 </TouchableOpacity>
             </View>

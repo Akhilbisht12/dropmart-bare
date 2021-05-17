@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, ToastAndroid } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import TitleHeader from '../../Components/TitleHeader'
 import { connect } from 'react-redux';
 import WooCommerce from '../../Components/WooCommerce';
@@ -21,6 +21,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     const [margin, setMargin] = useState(0);
     const [isOnline, setOnline] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [complete, setComplete] = useState(false)
     const [isGift, setGift] = useState(false)
     const [giftMessage, setGiftMessage] = useState('')
     const [coupon, setCoupon] = useState('')
@@ -63,12 +64,13 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             console.log(error);
         });
     }
-
+console.log(billing,'adlkfjasdlk')
     const order = () =>{
         setLoading(true)
         let list = [];
         let fee_lines
         let shipping_lines
+        let coupon_lines
         cart.map((item)=>{
             list.push({product_id : item.id,quantity : item.qty});
         })
@@ -83,19 +85,23 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
         }else {
             shipping_lines = []
         }
+
+        if(coupon!==''){
+            coupon_lines = [{code : coupon}]
+        }else{
+            coupon_lines = []
+        }
         const data = {
             payment_method: isOnline?'razorpar':'cod',
             payment_method_title: isOnline?'RazorPay Payment':'Cash On Delivery',
-            set_paid: false,
+            set_paid: isOnline?true:false,
             customer_id : profile.id,
             billing: billing,
             shipping: shipping[route.params.index],
             line_items: list,
             fee_lines : fee_lines,
             shipping_lines: shipping_lines,
-            coupon_lines : [
-                {code : coupon}
-            ]
+            coupon_lines : coupon_lines
           };
           
           WooCommerce.post("orders", data)
@@ -108,7 +114,8 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                 WooCommerce.post(`orders/${response.id}/notes`, data)
                 .then((responseNote) => {
                     console.log(responseNote);
-                    navigation.navigate('MyOrders')
+                    setComplete(true)
+                    setLoading(false)
                     emptyCart(0)
                 })
                 .catch((error) => {
@@ -117,11 +124,14 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                 });
               }else{
                   emptyCart(0)
-                  navigation.navigate('MyOrders')
+                  setLoading(false)
+                  setComplete(true)
               }
             })
             .catch((error) => {
-              console.log(error.response);
+              console.log(error);
+              setLoading(false);
+              ToastAndroid.show('Something went wrong', ToastAndroid.SHORT)
             });
     }
 
@@ -164,6 +174,17 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     }
 
     if(loading) return <Loader/>
+    else if(complete){
+        return(
+            <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}} >
+                <Ionicons name='checkmark-circle-outline' size={100} color='#c60607'/>
+                <Text style={{marginVertical : 10, fontSize : 30, fontWeight : 'bold'}}>Order Completed Successfully</Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+                    <Text style={{color : '#c60607', fontSize : 20}}>Go To Home</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
     return (
         <View style={styles.main}>
             <TitleHeader title='Order Summary' parent='Cart'/>
@@ -184,8 +205,10 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                     {/* apply gift wrap section */}
                     <View style={[styles.colorCont]}>
                         <Text  style={[styles.fontBd,{textAlign : 'center'}]}>Choose Gift Options</Text>
-                        <View style={{flexDirection : 'row'}}>
-                            <TouchableOpacity onPress={()=>setGift(!isGift)} style={{padding : 5, borderWidth : 1, borderRadius : 10, width : 15, height : 15, backgroundColor : isGift?'#c60607':'white', borderColor : '#c60607'}}></TouchableOpacity>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <TouchableOpacity onPress={()=>setGift(!isGift)} style={{}}>
+                                <Ionicons name={isGift?'checkmark-circle':'checkmark-circle-outline'} size={20} color={isGift?'#c60607':'black'}/>
+                            </TouchableOpacity>
                             <Text>  Is this a gift Item</Text>
                         </View>
                         <TextInput
@@ -200,7 +223,6 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         <Text  style={[styles.fontBd,{textAlign : 'center', marginVertical : 10}]}>Have coupon code ?</Text>
                         <View style={{flexDirection : 'row',borderWidth : 1, borderColor : 'lightgray', alignItems : 'center', justifyContent : 'space-between', paddingHorizontal : 10, borderRadius: 5}}>
                             <TextInput
-                                autoCapitalize={true}
                                 value={coupon}
                                 onChangeText={setCoupon}
                                 style={{height : 40, marginVertical : 1, width : 200}}
@@ -239,7 +261,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         <View style={[styles.flexBetween,{borderBottomWidth : 1, paddingBottom : 10, marginBottom : 5, borderBottomColor: 'grey'}]}>
                             <Text style={{fontWeight : 'bold'}}>Final Customer Price</Text>
                             {/* <Text>{isGift?margin+75-discount:margin-discount}</Text> */}
-                            <TextInput style={{borderWidth : 1, height : 40, borderRadius : 5, width : 50}} value={`${margin}`} onChangeText={setMargin}/>
+                            <TextInput style={{borderWidth : 1, height : 40, borderRadius : 5, width : 50, textAlign : 'right'}} value={`${margin}`} onChangeText={setMargin}/>
                         </View>
                         <View style={styles.flexBetween}>
                             <Text style={[styles.fontBd,{color : 'green'}]}>Margin Earned</Text>
@@ -255,26 +277,26 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                         <TouchableOpacity onPress={()=>setOnline(true)}>
                             <View style={[styles.flexBetween,{borderWidth : 1, borderColor : 'white', padding : 10, borderRadius : 5}]}>
                                 <View style={[{display : 'flex', flexDirection : 'row', alignItems :'center'}]}>
-                                    <Icon style={styles.icon} name='credit-card' size={20}/>
+                                    <Ionicons style={{marginHorizontal : 5}} color='black' name='card-outline' size={30}/>
                                     <View>
                                         <Text style={{fontSize : 20}}>Online</Text>
-                                        <Text style={{width : 250}}>Debit Card, Credit Cart, Net Banking, UPI</Text>
+                                        <Text style={{width : 200}}>Debit Card, Credit Cart, Net Banking, UPI</Text>
                                     </View>
                                 </View>
-                                <Icon name='check-circle' color={isOnline?'#c60607':'grey'} size={20}/>
+                                <Ionicons name={isOnline?'checkmark-circle':'checkmark-circle-outline'} color={isOnline?'#c60607':'grey'} size={20}/>
                             </View>
                         </TouchableOpacity>
                         {/* cash on delivery selection */}
                         <TouchableOpacity onPress={()=>setOnline(false)}>
                             <View style={[styles.flexBetween,{borderWidth : 1, borderColor : 'white', padding : 10, borderRadius : 5}]}>
                                 <View style={[{display : 'flex', flexDirection : 'row', alignItems :'center'}]}>
-                                    <Icon style={styles.icon} name='truck' size={20}/>
+                                    <Ionicons style={{marginHorizontal : 5}} color='black' name='cube-outline' size={30}/>
                                     <View>
                                         <Text style={{fontSize : 20}}>Cash On Delivery</Text>
                                         <Text>Pay when you receive the order</Text>
                                     </View>
                                 </View>
-                                <Icon name='check-circle' color={isOnline?'gray':'#c60607'} size={20}/>
+                                <Ionicons name={isOnline?'checkmark-circle-outline':'checkmark-circle'} color={isOnline?'gray':'#c60607'} size={20}/>
                             </View>
                         </TouchableOpacity>
                         

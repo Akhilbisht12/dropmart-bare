@@ -61,13 +61,13 @@ const CustomDrawer = (props,deleteUser) => {
                             label='My Orders'
                             onPress={()=>{props.navigation.navigate('MyOrders')}}
                             />
-                            {/* <DrawerItem
+                            <DrawerItem
                             icon={()=>(
-                                <Icon name='user-edit' color='red' size={20}/>
+                                <Icon name='user-edit' color='#c60607' size={20}/>
                             )}
                             label='My Account'
-                            onPress={()=>{props.navigation.navigate('Account')}}
-                            /> */}
+                            onPress={()=>{props.navigation.navigate('Profile')}}
+                            />
                             <DrawerItem
                             icon={()=>(
                                 <Icon name='user-slash' color='#c60607' size={20}/>

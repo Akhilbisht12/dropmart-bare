@@ -30,7 +30,7 @@ const CategoryComp = () => {
             </View>
             <View style={{flexDirection : 'row', flexWrap : 'wrap', justifyContent : 'space-evenly'}}>
                 {cat.map((item, i)=>{
-                    if(item.name!=='banners' &&item.name!=='Business Books' && item.name!=='Uncategorized' && i<6)
+                    if(item.name=='Book Combos' || item.name=='Fiction Novels' || item.name =='Old Novels' || item.name=='Non Fiction Novels')
                     return(
                         <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('CatProducts',{item : {id : item.id, name : item.name}})}>
                             <View key={item.id} style={{margin : 4, alignItems : 'center', width : width*0.45}}>

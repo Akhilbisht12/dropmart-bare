@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {StyleSheet, Dimensions, ScrollView, SafeAreaView} from 'react-native'
+import {StyleSheet, Dimensions, ScrollView, SafeAreaView, View, Text} from 'react-native'
 import Header from '../Components/Header';
 import ProductShow from '../Components/ProductShow'
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,8 @@ import Brands from '../Components/Brands'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CategoryBooks from '../Components/CategoryBooks';
 import Featured from '../Components/Featured';
+import AuthorCircle from '../Components/AuthorCircle';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 const { height, width}= Dimensions.get('window')
 
 export default function Home() {
@@ -21,9 +23,24 @@ export default function Home() {
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
                 <CategoryCircle/>
                 <FlatCarousel start={0} height={200}/>
+                <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', marginVertical : 20}}>
+                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
+                        <Ionicons name='cube' size={22} color='black'/>
+                        <Text style={{fontSize : 18}}>Free Delivery</Text>
+                    </View>
+                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
+                        <Ionicons name='wallet' size={22} color='black'/>
+                        <Text style={{fontSize : 18}}>Free COD</Text>
+                    </View>
+                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center'}}>
+                        <Ionicons name='arrow-redo-outline' size={22} color='black'/>
+                        <Text style={{fontSize : 18}}>Easy Returns</Text>
+                    </View>
+                </View>
                 <Featured/>
                 <CategoryComp/>
-                <FlatCarousel start={2} height={150}/>
+                <AuthorCircle/>
+                <FlatCarousel start={2} height={200}/>
                 {/* <View style={styles.cat}>
                     <CategoryComp/>
                 </View>
@@ -34,11 +51,11 @@ export default function Home() {
                     <Brands/>
                 </View> */}
                 <CategoryBooks id={38} name='Book Combos'/>
-                <FlatCarousel start={4} height={150}/>
+                <FlatCarousel start={4} height={200}/>
                 <CategoryBooks id={73} name='Fiction Books'/>
-                <FlatCarousel start={6} height={150}/>
+                <FlatCarousel start={6} height={200}/>
                 <CategoryBooks id={74} name='Non Fiction Books'/>
-                <FlatCarousel start={8} height={150}/>
+                <FlatCarousel start={8} height={200}/>
                 <CategoryBooks id={75} name='Children Books'/>
 
                 </ScrollView>
