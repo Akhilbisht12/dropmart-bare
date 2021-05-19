@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, Alert, Clipboard, Linking } from 'react-native'
+import { View, Text, Image, StyleSheet, Alert, Clipboard, Linking, Share } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native';
 import WooCommerce from '../Components/WooCommerce'
 import Loader from '../Components/Loader'
@@ -14,6 +14,7 @@ export default function SingleOrder({route}) {
     const value = route.params.status.value;
     let date = item.date_created.split('T')[0].split('-')
     let total = 0
+    let provider = ''
     const handleCancelOrder = () => {
         setLoading(true)
         const data = {
@@ -31,6 +32,28 @@ export default function SingleOrder({route}) {
               setLoading(false)
             });
           
+    }
+    let tracking_number;
+    item.meta_data.map((item)=>{
+        if(item.key === '_wc_shipment_tracking_items'){
+            tracking_number = item.value[0].tracking_number
+            if(item.value[0].tracking_provider==='dpd-at'){
+                provider = 'https://shiprocket.co/tracking/'
+            }else{
+                provider = 'https://www.xpressbees.com/track?isawb=Yes&trackid='
+            }
+        }
+    })
+
+
+    const share = async()=> {
+        try {
+            const sharedes = await Share.share({
+            message: tracking_number,
+            });
+        }catch(err){
+            console.log('Error =>', err);
+        }
     }
 
     const cancelOrderbtn = () => {
@@ -52,25 +75,28 @@ export default function SingleOrder({route}) {
                 <View style={{flexDirection : 'row', justifyContent : 'space-between',alignItems : 'center', paddingHorizontal : 20, paddingVertical : 10, backgroundColor : '#e0f2ff'}}>
                     <View>
                         <Text>current status : </Text>
-                        <Text style={{fontWeight : 'bold', fontSize : 16}}>{item.status}</Text>
+                        <Text style={{fontWeight : 'bold', fontSize : 16}}>{route.params.status.text}</Text>
                     </View>
-                    <View>
-                        <Text>{item.meta_data[0]?item.meta_data[0].value[0].tracking_number:''}</Text>
-                    </View>
+                    <TouchableOpacity onPress={()=>share()} style={{display : tracking_number?'flex':'none'}}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <Ionicons color='black' size={20} name='copy-outline'/>
+                            <Text style={{marginHorizontal : 5}}>{tracking_number?tracking_number:''}</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{paddingHorizontal : 20, paddingVertical : 10, backgroundColor : 'white', marginVertical : 5}}>
                     <Text>Order Tracking</Text>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=1?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Placed</Text>
-                            <Text style={{fontSize : 18}}>{item.date_created.split('T')[0]}</Text>
+                            <Text style={{fontSize : 18}}>{value===1?item.date_created.split('T')[0]:''}</Text>
                         </View>
                         {item.status==='pending'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=2?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Accepted</Text>
@@ -80,7 +106,7 @@ export default function SingleOrder({route}) {
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=3?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Packed</Text>
@@ -88,11 +114,11 @@ export default function SingleOrder({route}) {
                                 {date[0] + '-' + date[1] + '-' + (parseInt(date[2])+2)}
                                 </Text>
                         </View>
-                        {item.status==='onhold'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
+                        {item.status==='on-hold'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=4?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Shipped</Text>
@@ -100,8 +126,8 @@ export default function SingleOrder({route}) {
                             {item.status==='failed'?
                             <View>
                                 <Text>Your order Shipped Successfully !</Text>
-                                <TouchableOpacity onPress={()=>Linking.openURL(`https://shiprocket.co/tracking/${item.meta_data[0].value[0].tracking_number}`)}>
-                                    <Text style={{color : 'blue'}}>{`https://shiprocket.co/tracking/${item.meta_data[0].value[0].tracking_number}`}</Text>
+                                <TouchableOpacity onPress={()=>Linking.openURL(tracking_number?provider+tracking_number:provider)}>
+                                    <Text style={{color : 'blue'}}>{tracking_number?provider+tracking_number:provider}</Text>
                                 </TouchableOpacity>
                             </View>:console.log('')}
                             
@@ -110,7 +136,7 @@ export default function SingleOrder({route}) {
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=5?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Delivered</Text>
@@ -120,7 +146,7 @@ export default function SingleOrder({route}) {
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
                         </View>:console.log('')}
                     </View>
-                    <View style={{flexDirection : 'row', alignItems : 'flex-start', marginVertical : 2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'flex-end', marginVertical : 2}}>
                         <View style={{padding : 2, backgroundColor : value>=6?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Margin Payout</Text>

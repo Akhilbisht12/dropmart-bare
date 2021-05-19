@@ -29,6 +29,7 @@ import PhoneToWoo from "../Screens/Auth/PhoneToWoo";
 import ForgotPassword from "../Screens/Auth/ForgotPassword";
 import Profile from '../Screens/MyAccount/Profile'
 import EditBilling from "../Screens/MyAccount/EditBilling";
+import FeaturedProducts from '../Screens/FeaturedProducts'
 
 const data = {
   screenOne : {
@@ -75,7 +76,7 @@ function ScreenOne(){
 
 const StackNavigator = ({profile, billing, wishlist}) => {
 
-  console.log(billing)
+  // console.log(billing)
   const Stack = createStackNavigator();
   // const [initialRoute, setInitialRoute] = useState('');
   // useEffect(()=>{
@@ -120,6 +121,7 @@ const StackNavigator = ({profile, billing, wishlist}) => {
         <Stack.Screen name="PhoneToWoo" component={PhoneToWoo} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="EditBilling" component={EditBilling} />
+        <Stack.Screen name="FeaturedProducts" component={FeaturedProducts} />
       </Stack.Navigator>
     )
   }

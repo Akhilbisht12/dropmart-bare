@@ -13,7 +13,6 @@ import Loader from '../../Components/Loader';
 import { max } from 'react-native-reanimated';
 
 const OrderSummary = ({cart, billing, route, shipping, profile, navigation, emptyCart}) => {
-    console.log(route.params.index)
     const [productTotal, setProductTotal] = useState();
     const [subTotal, setSubTotal] = useState();
     const [discount, setDiscount] = useState(0);
@@ -55,16 +54,20 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     },[discount])
 
     const handleCoupon = () => {
-        WooCommerce.get("coupons",{code : coupon})
-        .then((response) => {
-           response.length === 0 ?ToastAndroid.show('No such Coupon Code', ToastAndroid.SHORT): setOff(response[0].amount); ToastAndroid.show('Coupon added', ToastAndroid.SHORT)
-           setDiscount(parseInt((productTotal*response[0].amount)/100))
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        if(coupon){
+            WooCommerce.get("coupons",{code : coupon})
+            .then((response) => {
+            console.log(response)
+               response.length === 0 ?ToastAndroid.show('No such Coupon Code', ToastAndroid.SHORT): setOff(response[0].amount); ToastAndroid.show('Coupon added', ToastAndroid.SHORT)
+               setDiscount(parseInt((productTotal*response[0].amount)/100))
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }else{
+            ToastAndroid.show('Enter Coupon Code', ToastAndroid.SHORT)
+        }
     }
-console.log(billing,'adlkfjasdlk')
     const order = () =>{
         setLoading(true)
         let list = [];

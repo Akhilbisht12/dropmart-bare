@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, TextInput ,Button, Image, ScrollView, Text, TouchableOpacity, Dimensions, ToastAndroid} from 'react-native'
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,20 @@ const PhoneAuth = ({navigation}) => {
     const [code, setCode] = useState('');
     const [loading, setLoading] = useState(false);
   
+    useEffect( () => {
+      auth().onAuthStateChanged( (user) => {
+          if (user) {
+              // Obviously,
+              console.log(user)
+              //  you can add more statements here, 
+              //       e.g. call an action creator if you use Redux. 
+  
+              // navigate the user away from the login screens: 
+              navigation.navigate("PhoneToWoo", {phone : user.phoneNumber});
+          }
+      });
+  }, [confirm]);  
+
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
       setLoading(true)
@@ -23,7 +37,9 @@ const PhoneAuth = ({navigation}) => {
   
     async function confirmCode() {
       try {
-        const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
+        // const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
+        await confirm.confirm(code)
+        // console.log(credential)
         navigation.navigate('PhoneToWoo', {phone})
       } catch (error) {
         console.log(error)

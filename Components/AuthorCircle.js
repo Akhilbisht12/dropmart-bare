@@ -29,26 +29,30 @@ export default function AuthorCircle() {
     if(loading) return <CategoryLoader/>
     else{
         return (
-            <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            style={{flexWrap : 'wrap', padding : 5}}>
-                {category.map((item)=>{
-                   if(item.image){
-                       var image = item.image.src;
-                   }else{
-                       var image = 'https://dropmarts.com/wp-content/uploads/woocommerce-placeholder.png'
-                   }
-                   if(item.name!=='banners' && item.name!=='Uncategorized'){
-                    return(
-                        <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('CatProducts', {item})}>
-                            <Category url={image} title={item.name}/>
-                        </TouchableOpacity>
-                        )
-                   }
-                   
-                })}
-            </ScrollView>
+            <View>
+                <Text style={{marginHorizontal : 15, fontSize : 25, fontWeight : 'bold'}}>Top Authors</Text>
+                <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                style={{flexWrap : 'wrap', padding : 5}}>
+                    {category.map((item)=>{
+                    if(item.image){
+                        var image = item.image.src;
+                    }else{
+                        var image = 'https://dropmarts.com/wp-content/uploads/woocommerce-placeholder.png'
+                    }
+                    if(item.name!=='banners' && item.name!=='Uncategorized'){
+                        return(
+                            <TouchableOpacity key={item.id} onPress={()=>navigation.navigate('CatProducts', {item})}>
+                                <Category url={image} title={item.name}/>
+                            </TouchableOpacity>
+                            )
+                    }
+                    
+                    })}
+                </ScrollView>
+            </View>
+            
         )
     }
 }

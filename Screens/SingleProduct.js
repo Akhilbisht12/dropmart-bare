@@ -30,7 +30,7 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
             setReviews(response)
             setLoading(false);
         })
-    },[])
+    },[setPostReview])
 
     const PostReview = () => {
         WooCommerce.post("products/reviews", {
@@ -41,14 +41,8 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
             rating: rating
           })
         .then((response) => {
-            if(response.verified === false){
-                ToastAndroid.show('You have not purchased this product', ToastAndroid.SHORT)
-                setPostReview('')
-                WooCommerce.delete(`products/reviews/${response.id}`, {force: true})
-            }else{
-                ToastAndroid.show('Review Submitted', ToastAndroid.SHORT)
-                setPostReview('')
-            }
+            ToastAndroid.show('Review Submitted', ToastAndroid.SHORT)
+            setPostReview('')
         })
         .catch((error) => {
             console.log(error.response.data);
@@ -105,7 +99,7 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                                 <Text style={{backgroundColor : 'green', color : 'white', paddingHorizontal : 5, borderRadius : 10}}>%</Text>
                                 <Text> {Math.floor((item.regular_price-item.sale_price)*100/item.regular_price)} OFF from market price</Text>
                             </View>
-                            <Text style={{fontSize : 15, fontWeight : 'bold', color : 'gray', marginHorizontal : 10, marginVertical : 5}}>Price inculsive of GST</Text>
+                            <Text style={{fontSize : 15, fontWeight : 'bold', color : 'gray', marginHorizontal : 10, marginVertical : 5}}>Price exclusive of GST</Text>
                             <View style={styles.flexStart}>
                                 <Ionicons style={styles.icon} name='pricetag' size={20}/>
                                 <Text> Free Shipping</Text>
@@ -114,7 +108,7 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                                 <Ionicons style={styles.icon} name='cube' size={20}/>
                                 <Text> Dispatch in 2-3 days</Text>
                             </View>
-                            <View style={styles.flexStart}>
+                            <View style={[styles.flexStart,{flexWrap : 'wrap'}]}>
                                 <Ionicons style={styles.icon} name='albums' size={20}/>
                                 {item.tags.map((tag)=>{
                                     return (
@@ -132,15 +126,15 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                         </View>
                         <View style={styles.ease}>
                             <View style={styles.easeView}>
-                                <Ionicons name='wallet' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
+                                <Ionicons name='wallet-outline' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
                                 <Text style={styles.easeText}>Free Cash On Delivery</Text>
                             </View>
                             <View style={styles.easeView}>
-                                <Ionicons name='wallet' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
+                                <Ionicons name='arrow-undo-outline' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
                                 <Text style={styles.easeText}>7 Days Easy Returns</Text>
                             </View>
                             <View style={styles.easeView}>
-                                <Ionicons name='wallet' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
+                                <Ionicons name='pricetags-outline' style={{backgroundColor : 'white', padding : 5, borderRadius : 20}} color='#c60607' size={30}/>
                                 <Text style={styles.easeText}>Lowest Price Guaranteed</Text>
                             </View>
                         </View>

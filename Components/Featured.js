@@ -10,7 +10,7 @@ const Featured = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     useEffect(() => {
-        WooCommerce.get('products', {featured : true})
+        WooCommerce.get('products', {featured : true, perpage : 10})
         .then(response=>{
             // console.log(response)
             setData(response)
@@ -23,7 +23,7 @@ const Featured = () => {
         <View style={{marginVertical : 10}}>
             <View style={{flexDirection : 'row', justifyContent : 'space-between', paddingHorizontal : 10, alignItems : 'center', marginVertical : 10}}>
                 <Text style={{fontSize : 25, fontWeight : 'bold'}}>Top Savers Today</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('CatProducts', {item : {id : 38, name : 'Top Savers'}})}>
+                <TouchableOpacity onPress={()=>navigation.navigate('FeaturedProducts')}>
                     <Text style={{color : '#c60607'}}>View all</Text>
                 </TouchableOpacity>
             </View>
