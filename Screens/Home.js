@@ -43,7 +43,7 @@ export default function Home() {
             <Featured/>
             <CategoryComp/>
             <AuthorCircle/>
-            <FlatCarousel start={2} height={150}/>
+            <FlatCarousel start={2} height={150} goto={{id : 38, name : 'Book Combos'}}/>
             {/* <View style={styles.cat}>
                 <CategoryComp/>
             </View>
@@ -54,11 +54,11 @@ export default function Home() {
                 <Brands/>
             </View> */}
             <CategoryBooks id={38} name='Book Combos'/>
-            <FlatCarousel start={4} height={150}/>
+            <FlatCarousel start={4} height={150} goto={{id : 70, name : 'Old Novels'}}/>
             <CategoryBooks id={70} name='Old Novels'/>
-            <FlatCarousel start={6} height={150}/>
+            <FlatCarousel start={6} height={150} goto={{id : 74, name : 'Non Fiction Books'}}/>
             <CategoryBooks id={74} name='Non Fiction Books'/>
-            <FlatCarousel start={8} height={150}/>
+            <FlatCarousel start={8} height={150} goto={{id : 75, name : 'Children Books'}}/>
             <CategoryBooks id={75} name='Children Books'/>
 
             </ScrollView>

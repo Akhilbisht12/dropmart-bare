@@ -3,10 +3,12 @@ import { View, Text, Dimensions, ScrollView, Image } from 'react-native'
 import {FlatListSlider} from 'react-native-flatlist-slider';
 import WooCommerce from '../Components/WooCommerce';
 import HeaderLoader from '../Loaders/HeaderLoader'
+import { useNavigation } from '@react-navigation/native';
 
 const {width} = Dimensions.get('window')
 
-export default function FlatCarousel({height, start}) {
+export default function FlatCarousel({height, start, goto}) {
+  const navigation = useNavigation();
       const end = start+2
       const [loading, setLoading] = useState(true);
       const [images, setImages] = useState([])
@@ -40,7 +42,7 @@ export default function FlatCarousel({height, start}) {
             imageKey={'url'}
             timer={5000}
             height={height}
-            onPress={()=>{}}
+            onPress={()=>{goto?navigation.navigate('CatProducts', {item : {id : goto.id, name : goto.name}}):console.log('')}}
             indicatorActiveWidth={20}
           />
           // <ScrollView horizontal pagingEnabled  style={{borderRadius : 5}}>

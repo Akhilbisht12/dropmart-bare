@@ -27,16 +27,16 @@ const CustomDrawer = (props,deleteUser) => {
                             </View>
                             <Text style={styles.username}>DropMart</Text>
                             <View style={{flexDirection : 'row', marginVertical : 5}}>
-                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://www.instagram.com/upgrate.in/')}>
+                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://www.instagram.com/dropmarts/')}>
                                     <Icon name='instagram' color='white' size={20}/>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://www.facebook.com/upgrate.in')}>
+                                {/* <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://www.facebook.com/upgrate.in')}>
                                     <Icon name='facebook-square' color='white' size={20}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://wa.me/+918979877325')}>
+                                </TouchableOpacity> */}
+                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL('https://wa.me/+918948696686')}>
                                     <Icon name='whatsapp' color='white' size={20}/>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL(`tel:${8979877325}`)}>
+                                <TouchableOpacity style={{marginHorizontal : 10}} onPress={()=>Linking.openURL(`tel:${8948696686}`)}>
                                     <Icon name='phone' color='white' size={20}/>
                                 </TouchableOpacity>
                             </View>
@@ -80,9 +80,9 @@ const CustomDrawer = (props,deleteUser) => {
                         </View>
                     </View>
                     <View style={{alignItems : 'center', backgroundColor : '#c60607', paddingVertical : 5}}>
-                        <TouchableOpacity style={{flexDirection : 'row'}} onPress={()=>Linking.openURL('https://www.upgrate.in/')}>
-                            <Text style={{color : 'white'}}>Developed By</Text>
-                            <Text style={{color : 'white', fontWeight : 'bold'}}> Upgrate.in</Text>
+                        <TouchableOpacity style={{flexDirection : 'row'}}>
+                            <Text style={{color : 'white'}}>All Rights Reserved</Text>
+                            {/* <Text style={{color : 'white', fontWeight : 'bold'}}> Upgrate.in</Text> */}
                         </TouchableOpacity>
                     </View>
                 </View>

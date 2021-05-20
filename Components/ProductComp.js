@@ -135,7 +135,8 @@ const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFr
         },
         cat : {
             fontSize : 15,
-            color : 'grey'
+            color : 'grey',
+            width : width*0.3
         },
         shareBtn : {
             display : 'flex',
