@@ -26,6 +26,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
+    "react-native-bootsplash": "^3.2.3",
     "react-native-flatlist-slider": "^1.0.5",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-global-props": "^1.1.5",

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, Linking, ToastAndroid } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Dimensions, Linking, ToastAndroid, Alert } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useSafeArea } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,44 +10,18 @@ import { connect } from 'react-redux';
 import { addBilling, addUser } from '../../Redux/User/User-Action';
 import Axios from 'axios';
 
-const Login = ({navigation,addUser, addBilling}) => {
+const Login = ({navigation,addUser, addBilling, route}) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [loading, setLoading] =useState(false)
 
-    // const handleLogin = () => {
-    //     setLoading(true)
-    //     WooCommerce.get("customers", {
-    //         email : email
-    //     })
-    //     .then((response) => {
-    //     console.log(response);
-    //     if(response.length === 0){
-    //         alert('No User Found')
-    //         setLoading(false)
-    //     }else if(response.data){
-    //         if(response.data.status === 400){
-    //             alert('Invalid Email')
-    //             setLoading(false)
-    //         }
-    //     }else if(response[0].billing.company){
-    //         if(response[0].billing.company === password){
-    //             addUser(response[0]);
-    //             AsyncStorage.setItem('user', JSON.stringify(response[0]))
-    //             .then((res)=>{
-    //                 navigation.navigate('Home');
-    //             })
-    //             setLoading(false)
-    //         }else{
-    //             alert('Invalid Password')
-    //             setLoading(false)
-    //         }
-    //     }
-    //     })
-    //     .catch((error) => {
-    //     console.log(error);
-    //     });
-    // }
+   useEffect(() => {
+       if(route.params?route.params.parent==='logout':false){
+            navigation.addListener('beforeRemove', (e)=>{
+                e.preventDefault();
+            })
+        }
+   }, [navigation])
 
     const handleLogin = () => {
         setLoading(true)

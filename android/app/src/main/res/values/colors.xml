@@ -4,4 +4,5 @@
   <color name="iconBackground">#FFFFFF</color>
   <color name="colorPrimary">#000000</color>
   <color name="white">#FFF</color>
+    <color name="bootsplash_background">#FFFFFF</color>
 </resources>

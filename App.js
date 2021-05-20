@@ -6,8 +6,13 @@ import { Provider } from "react-redux";
 import {store, persistor} from "./Redux/Store";
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import {setCustomText} from 'react-native-global-props'
+import RNBootSplash from "react-native-bootsplash";
 
 export default function App() {
+
+  useEffect(() => {
+    RNBootSplash.hide({ fade: true });
+  }, []);
 
   setCustomText({
     style : {

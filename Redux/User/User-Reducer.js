@@ -47,8 +47,10 @@ const UserReducer = (state = INITIAL_STATE, action) => {
         }
 
         case actionTypes.DELETE_USER : 
-        console.log('user deleted')
-        return INITIAL_STATE
+        return {
+            ...state,
+            profile : {}
+        }
 
         case actionTypes.EDIT_USER : 
         return { 

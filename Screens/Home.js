@@ -11,56 +11,59 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CategoryBooks from '../Components/CategoryBooks';
 import Featured from '../Components/Featured';
 import AuthorCircle from '../Components/AuthorCircle';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { CommonActions } from '@react-navigation/native';
+
 const { height, width}= Dimensions.get('window')
 
 export default function Home() {
     const navigation = useNavigation();
     const cart = [];
-            return(
-                <SafeAreaView style={styles.main}>
-                    <Header/>
-                <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
-                <CategoryCircle/>
-                <FlatCarousel start={0} height={200}/>
-                <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', marginVertical : 20}}>
-                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
-                        <Ionicons name='cube' size={22} color='black'/>
-                        <Text style={{fontSize : 18}}>Free Delivery</Text>
-                    </View>
-                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
-                        <Ionicons name='wallet' size={22} color='black'/>
-                        <Text style={{fontSize : 18}}>Free COD</Text>
-                    </View>
-                    <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center'}}>
-                        <Ionicons name='arrow-redo-outline' size={22} color='black'/>
-                        <Text style={{fontSize : 18}}>Easy Returns</Text>
-                    </View>
+
+        return(
+            <SafeAreaView style={styles.main}>
+                <Header/>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
+            <CategoryCircle/>
+            <FlatCarousel start={0} height={200}/>
+            <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', marginVertical : 20}}>
+                <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
+                    <Ionicons name='cube' size={22} color='black'/>
+                    <Text style={{fontSize : 18}}>Free Delivery</Text>
                 </View>
-                <Featured/>
+                <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center', borderRightWidth : 1, paddingHorizontal : 5}}>
+                    <Ionicons name='wallet' size={22} color='black'/>
+                    <Text style={{fontSize : 18}}>Free COD</Text>
+                </View>
+                <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center'}}>
+                    <Ionicons name='arrow-redo-outline' size={22} color='black'/>
+                    <Text style={{fontSize : 18}}>Easy Returns</Text>
+                </View>
+            </View>
+            <Featured/>
+            <CategoryComp/>
+            <AuthorCircle/>
+            <FlatCarousel start={2} height={150}/>
+            {/* <View style={styles.cat}>
                 <CategoryComp/>
-                <AuthorCircle/>
-                <FlatCarousel start={2} height={150}/>
-                {/* <View style={styles.cat}>
-                    <CategoryComp/>
-                </View>
-                <Text style={{fontSize : 25, fontWeight : 'bold', paddingHorizontal : 10, marginTop : 20}}>Popular Products</Text>
-                <View style={styles.productGrid}>
+            </View>
+            <Text style={{fontSize : 25, fontWeight : 'bold', paddingHorizontal : 10, marginTop : 20}}>Popular Products</Text>
+            <View style={styles.productGrid}>
 
-                    <ProductShow/>
-                    <Brands/>
-                </View> */}
-                <CategoryBooks id={38} name='Book Combos'/>
-                <FlatCarousel start={4} height={150}/>
-                <CategoryBooks id={70} name='Old Novels'/>
-                <FlatCarousel start={6} height={150}/>
-                <CategoryBooks id={74} name='Non Fiction Books'/>
-                <FlatCarousel start={8} height={150}/>
-                <CategoryBooks id={75} name='Children Books'/>
+                <ProductShow/>
+                <Brands/>
+            </View> */}
+            <CategoryBooks id={38} name='Book Combos'/>
+            <FlatCarousel start={4} height={150}/>
+            <CategoryBooks id={70} name='Old Novels'/>
+            <FlatCarousel start={6} height={150}/>
+            <CategoryBooks id={74} name='Non Fiction Books'/>
+            <FlatCarousel start={8} height={150}/>
+            <CategoryBooks id={75} name='Children Books'/>
 
-                </ScrollView>
-            </SafeAreaView>
-            )}
+            </ScrollView>
+        </SafeAreaView>
+        )}
 
 const styles= StyleSheet.create({
     scroll : {

@@ -76,7 +76,7 @@ function ScreenOne(){
 
 const StackNavigator = ({profile, billing, wishlist}) => {
 
-  // console.log(billing)
+  console.log(profile)
   const Stack = createStackNavigator();
   // const [initialRoute, setInitialRoute] = useState('');
   // useEffect(()=>{
@@ -100,8 +100,6 @@ const StackNavigator = ({profile, billing, wishlist}) => {
         <Stack.Screen name='ScreenThree' component={ScreenThree}/>
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="Summary" component={OrderSummary} />
-        <Stack.Screen name="Signup" component={SignUp} />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="MyAccount" component={Account} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Home" component={BottomNavigators} />
@@ -117,11 +115,13 @@ const StackNavigator = ({profile, billing, wishlist}) => {
         <Stack.Screen name="Wishlist" component={Wishlist} />
         <Stack.Screen name="Earnings" component={Earnings} />
         <Stack.Screen name="BankDetails" component={BankDetails} />
-        <Stack.Screen name="PhoneAuth" component={PhoneAuth} />
-        <Stack.Screen name="PhoneToWoo" component={PhoneToWoo} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="EditBilling" component={EditBilling} />
         <Stack.Screen name="FeaturedProducts" component={FeaturedProducts} />
+        <Stack.Screen name="Signup" component={SignUp} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="PhoneAuth" component={PhoneAuth} />
+        <Stack.Screen name="PhoneToWoo" component={PhoneToWoo} />
       </Stack.Navigator>
     )
   }

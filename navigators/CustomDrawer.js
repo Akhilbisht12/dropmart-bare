@@ -6,12 +6,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Loader from '../Components/Loader';
 import { connect } from 'react-redux';
 import { deleteUser } from '../Redux/User/User-Action';
+import auth from '@react-native-firebase/auth';
 
 const CustomDrawer = (props,deleteUser) => {
 
     const handleLogout = () => {
-        AsyncStorage.clear()
-        props.navigation.navigate('Login')
+        AsyncStorage.clear();
+        props.navigation.navigate('Login', {parent : 'logout'})
+        auth().signOut()
     }
 
     return (

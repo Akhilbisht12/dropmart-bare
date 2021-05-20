@@ -29,21 +29,27 @@ const PhoneAuth = ({navigation}) => {
 
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
-      setLoading(true)
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      setConfirm(confirmation);
-      setLoading(false)
+      if(phone && phone.length===10){
+        setLoading(true)
+        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+        setConfirm(confirmation);
+        setLoading(false)
+      }else{
+        ToastAndroid.show('Invalid Number', ToastAndroid.SHORT)
+      }
     }
   
     async function confirmCode() {
-      try {
-        // const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
-        await confirm.confirm(code)
-        // console.log(credential)
-        navigation.navigate('PhoneToWoo', {phone})
-      } catch (error) {
-        console.log(error)
-        ToastAndroid.show('Invalid OTP', ToastAndroid.SHORT)
+      if(code && code.length ===6){
+        try {
+          // const credential = auth.PhoneAuthProvider.credential(confirm.verificationId, code);
+          await confirm.confirm(code)
+          // console.log(credential)
+          navigation.navigate('PhoneToWoo', {phone})
+        } catch (error) {
+          console.log(error)
+          ToastAndroid.show('Invalid OTP', ToastAndroid.SHORT)
+        }
       }
     }
   

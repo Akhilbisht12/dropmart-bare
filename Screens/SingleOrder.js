@@ -90,7 +90,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=1?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Placed</Text>
-                            <Text style={{fontSize : 18}}>{value===1?item.date_created.split('T')[0]:''}</Text>
+                            <Text style={{fontSize : 18}}>{value<=1?item.date_created.split('T')[0]:'Order Placed'}</Text>
                         </View>
                         {item.status==='pending'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
@@ -100,7 +100,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=2?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Accepted</Text>
-                            <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+1)}</Text>
+                            <Text style={{fontSize : 18}}>{value<=2?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+1):'Order Accepted'}</Text>
                         </View>
                         {item.status==='processing'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
@@ -111,7 +111,7 @@ export default function SingleOrder({route}) {
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Packed</Text>
                             <Text style={{fontSize : 18}}>
-                                {date[0] + '-' + date[1] + '-' + (parseInt(date[2])+2)}
+                                {value<=3?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+2):'Order Packed'}
                                 </Text>
                         </View>
                         {item.status==='on-hold'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
@@ -122,7 +122,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=4?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Shipped</Text>
-                            <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+3)}</Text>
+                            <Text style={{fontSize : 18}}>{value<=4?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+3):'Order Shipped'}</Text>
                             {item.status==='failed'?
                             <View>
                                 <Text>Your order Shipped Successfully !</Text>
@@ -140,7 +140,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=5?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Delivered</Text>
-                            <Text style={{fontSize : 18}}>{date[0] + '-' + date[1] + '-' + (parseInt(date[2])+7)}</Text>
+                            <Text style={{fontSize : 18}}>{value<=5?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+7):'Order Delivered'}</Text>
                         </View>
                         {item.status==='completed'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>

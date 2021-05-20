@@ -49,7 +49,7 @@ export default function Search({navigation}) {
     }
     else if(loading === 3 && products.length!==0) {
         return (
-            <View style={{}}>
+            <View style={{flex : 1}}>
                 {/* <View style={{flexDirection : 'row', justifyContent : 'space-evenly', alignItems : 'center'}}>
                     <View style={styles.search}>
                         <TextInput style={{height : 40,width : Dimensions.get('window').width-150}} onChangeText={(text)=>setSearch(text)}/>

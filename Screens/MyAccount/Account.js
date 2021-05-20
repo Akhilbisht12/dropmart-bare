@@ -6,6 +6,9 @@ import TitleHeader from '../../Components/TitleHeader'
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { deleteUser } from '../../Redux/User/User-Action'
+import auth from '@react-native-firebase/auth';
+
 
 const List = ({name, title, navigate}) => {
     const navigation = useNavigation()
@@ -22,12 +25,15 @@ const List = ({name, title, navigate}) => {
 
 
 
-const Account = ({profile}) => {
+const Account = ({profile,deleteUser}) => {
+    
     const navigation = useNavigation()
-
     const handleLogout = () => {
+        console.log('hit')
         AsyncStorage.clear();
-        navigation.navigate('Login')
+        navigation.navigate('Login', {parent : 'logout'})
+        deleteUser()
+        auth().signOut()
     }
 
     return (
@@ -58,7 +64,7 @@ const Account = ({profile}) => {
                         </View>
                     </TouchableOpacity>
                     <List name='cash' title='Bank Details' navigate='BankDetails'/>
-                    <TouchableOpacity onPress={()=>Linking.openURL('https://www.elocalshops.com/pages/easy-faqs')}>
+                    <TouchableOpacity onPress={()=>Linking.openURL('https://dropmarts.com/help-faq/')}>
                         <View style={styles.listMain}>
                             <Icon name='information-circle' color='grey' size={30}/>
                             <Text style={styles.listTitle}>Help & FAQ</Text>
@@ -130,4 +136,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Account)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteUser : ()=>dispatch(deleteUser())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account)
