@@ -52,10 +52,14 @@ const Wishlist = ({wishlist, addToCart, removeFromWishlist}) => {
                             <Text style={{fontSize : 20, color : 'white'}}>Share</Text>
                             <Ionicons color='white' style={{marginHorizontal : 5}} size={25} name='logo-whatsapp'/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.shareBtn,{backgroundColor : '#c60607', borderColor : '#c60607'}]} onPress={()=>addToCart(item)}>
+                        {item.stock_status === 'outofstock'?
+                        <TouchableOpacity style={[styles.shareBtn,{backgroundColor : '#c60607', borderColor : '#c60607', paddingVertical : 8}]}>
+                            <Text style={{fontSize : 20, color : 'white'}}>Out Of Stock</Text>
+                        </TouchableOpacity>
+                        :<TouchableOpacity style={[styles.shareBtn,{backgroundColor : '#c60607', borderColor : '#c60607'}]} onPress={()=>addToCart(item)}>
                             <Text style={{fontSize : 20, color : 'white'}}>Add To Cart</Text>
                             <Ionicons style={{marginHorizontal : 5}} size={25} color='white' name='cart-outline'/>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                     </View>
                 </View>
             </View>

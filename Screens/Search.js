@@ -70,11 +70,13 @@ export default function Search({navigation}) {
                         <Icon style={styles.icon} name='search' color='white' size={20}/>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={{marginBottom : StatusBar.currentHeight*3}}>
+                <ScrollView>
                     <View style={{flexWrap : 'wrap', justifyContent : 'center', flexDirection : 'row'}}>
                         {products.map((item)=>{
-                            return item.images.map((image)=>{
-                                return(<ProductComp key={item.id} item={item} image={image.src}/>)
+                            return item.images.map((image,i)=>{
+                                if(i==0){
+                                    return(<ProductComp key={item.id} item={item} image={image.src}/>)
+                                }
                             })
                         })}
                     </View>

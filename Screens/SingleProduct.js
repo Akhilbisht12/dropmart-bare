@@ -196,12 +196,18 @@ const SingleProduct = ({route, addToCart, addToWishlist, billing}) => {
                         <Text style={[styles.btnText,{color : 'white'}]}>Share</Text>
                         <Icon color='white' style={{marginHorizontal : 5}} size={20} name='whatsapp'/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{
+                    {item.stock_status === 'outofstock'?
+                    <TouchableOpacity style={[styles.btn,{borderColor : 'red'}]}>
+                    <Text style={[styles.btnText,{color :'red'}]}>Out Of Stock</Text>
+                    </TouchableOpacity>
+                    :<TouchableOpacity onPress={()=>{
                         addToCart(cartItem)
                         ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
                         }} style={[styles.btn,{borderColor : 'red'}]}>
                         <Text style={[styles.btnText,{color :'red'}]}>Add To Cart</Text>
                     </TouchableOpacity>
+                    }
+                    
                 </View>
             </View>
         )

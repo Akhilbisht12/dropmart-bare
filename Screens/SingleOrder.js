@@ -13,6 +13,12 @@ export default function SingleOrder({route}) {
     const item = route.params.item;
     const value = route.params.status.value;
     let date = item.date_created.split('T')[0].split('-')
+    let tempdate = new Date(item.date_created)
+    let Accepted = new Date(tempdate.getTime() + 86400000).toISOString().slice(0,10)
+    let Packed = new Date(tempdate.getTime() + 2*86400000).toISOString().slice(0,10)
+    let Shipped = new Date(tempdate.getTime() + 3*86400000).toISOString().slice(0,10)
+    let Delivered = new Date(tempdate.getTime() + 7*86400000).toISOString().slice(0,10)
+    console.log(Accepted)
     let total = 0
     let provider = ''
     const handleCancelOrder = () => {
@@ -100,7 +106,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=2?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Accepted</Text>
-                            <Text style={{fontSize : 18}}>{value<=2?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+1):'Order Accepted'}</Text>
+                            <Text style={{fontSize : 18}}>{value<=2?Accepted:'Order Accepted'}</Text>
                         </View>
                         {item.status==='processing'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
@@ -111,7 +117,7 @@ export default function SingleOrder({route}) {
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Packed</Text>
                             <Text style={{fontSize : 18}}>
-                                {value<=3?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+2):'Order Packed'}
+                                {value<=3?Packed:'Order Packed'}
                                 </Text>
                         </View>
                         {item.status==='on-hold'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
@@ -122,7 +128,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=4?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Shipped</Text>
-                            <Text style={{fontSize : 18}}>{value<=4?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+3):'Order Shipped'}</Text>
+                            <Text style={{fontSize : 18}}>{value<=4?Shipped:'Order Shipped'}</Text>
                             {item.status==='failed'?
                             <View>
                                 <Text>Your order Shipped Successfully !</Text>
@@ -140,7 +146,7 @@ export default function SingleOrder({route}) {
                         <View style={{padding : 2, backgroundColor : value>=5?'green':'grey', height : 80, marginRight: 10}}></View>
                         <View>
                             <Text style={{fontWeight : 'bold', fontSize : 18}}>Delivered</Text>
-                            <Text style={{fontSize : 18}}>{value<=5?date[0] + '-' + date[1] + '-' + (parseInt(date[2])+7):'Order Delivered'}</Text>
+                            <Text style={{fontSize : 18}}>{value<=5?Delivered:'Order Delivered'}</Text>
                         </View>
                         {item.status==='completed'?<View style={{position : 'absolute', bottom : -5, left : -6, borderWidth : 2, borderRadius : 12, padding : 1, borderColor : 'green', backgroundColor : 'white'}}>
                             <View style={{padding : 5, backgroundColor : 'green', borderRadius : 10}}></View>
@@ -182,6 +188,7 @@ export default function SingleOrder({route}) {
                 </View>
                 <View style={{paddingHorizontal : 20, paddingVertical : 10, backgroundColor : 'white', marginVertical : 4}}>
                     <Text style={{fontWeight : 'bold', fontSize : 25, paddingBottom : 4, borderBottomWidth : 1, borderBottomColor : 'gray'}}>Order Summary</Text>
+                    <Text>Customer final prices are inculsive of gift pack charges and shipping charges</Text>
                     <View style={{flexDirection : 'row', justifyContent : 'space-between', marginVertical : 5}}>
                         <Text>Product Amount</Text>
                         <Text>{total}</Text>
@@ -196,7 +203,7 @@ export default function SingleOrder({route}) {
                     </View>
                     <View style={{flexDirection : 'row', justifyContent : 'space-between', marginVertical : 5}}>
                         <Text style={{fontWeight : 'bold'}}>Customer Final Price</Text>
-                        <Text>{parseInt(item.fee_lines[0].total) + total}</Text>
+                        <Text>{item.total}</Text>
                     </View>
                 </View>
             </ScrollView>

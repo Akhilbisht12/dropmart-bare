@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput,Dimensions } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput,Dimensions, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux';
 import TitleHeader from '../../Components/TitleHeader';
 import { updateShipping } from '../../Redux/User/User-Action';
@@ -13,28 +13,32 @@ const EditBilling = ({route, shipping, updateShipping}) => {
     console.log(shipping[index].first_name)
     const [first_name, set_first_name] = useState(shipping[index].first_name);
     const [last_name, set_last_name] = useState(shipping[index].last_name);
-    const [phone, set_phone] = useState(shipping[index].phone);
+    const [phone, set_phone] = useState(shipping[index].company);
     const [address_1, set_address_1] = useState(shipping[index].address_1);
     const [address_2, set_address_2] = useState(shipping[index].address_2);
     const [city, set_city] = useState(shipping[index].city);
-    const [pincode, set_pincode] = useState(shipping[index].pincode);
+    const [pincode, set_pincode] = useState(shipping[index].postcode);
     const [state, set_state] = useState(shipping[index].state);
     const [country, set_country] = useState(shipping[index].country);
 
     const handleUpdate = () => {
+        if(first_name === '' || last_name ==='' && phone === '' || address_1 === '' || address_2 === '' || city === '' || pincode === ''|| country === ''){
+            ToastAndroid.show("Fill Out complete details !", ToastAndroid.SHORT);
+        }else{
         let temp = {
             first_name,
             last_name,
-            phone,
+            company : phone,
             address_1,
             address_2,
             city,
-            pincode,
+            postcode : pincode,
             state,
             country
         }
         updateShipping(temp, index)
         navigation.navigate('Address')
+        }
     }
 
     const styles = StyleSheet.create({
@@ -82,7 +86,7 @@ const EditBilling = ({route, shipping, updateShipping}) => {
                         <Text style={{color : 'white', textAlign : 'center', fontSize : 18}}>Update</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={()=>navigation.navigation('MyAddress')}
+                    onPress={()=>navigation.navigate('Address')}
                     style={[styles.btn,{borderWidth : 1, borderColor : '#c60607', borderRadius : 5, marginHorizontal : 5, width : width*0.45}]}>
                         <Text style={{color : '#c60607', textAlign : 'center', fontSize : 18}}>Close</Text>
                     </TouchableOpacity>

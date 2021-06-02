@@ -51,10 +51,10 @@ import { editUser } from '../../Redux/User/User-Action';
             </View>
             <View>
                 <Text>{data.first_name + ' ' + data.last_name}</Text>
-                <Text>+91 {data.phone}</Text>
+                <Text>+91 {data.company}</Text>
                 <Text>{data.address_1 + ' ' + data.address_2}</Text>
                 <Text>{data.city + ' ' + data.state}</Text>
-                <Text>{data.pincode + ' ' + data.country}</Text>
+                <Text>{data.postcode + ' ' + data.country}</Text>
             </View>
             {/* <View style={styles.changeView}>
                 <View style={styles.flexBetween}>

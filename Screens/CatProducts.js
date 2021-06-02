@@ -46,11 +46,18 @@ export default function CatProducts({route}) {
         }else if(i === products.length-1){
             return(
                 <View>
-                    <TouchableOpacity onPress={handlePageChange} style={{alignItems : 'center', paddingVertical : 10, backgroundColor : 'red', marginBottom : 5}}>
-                        <Text style={{color : 'white'}}>Load More</Text>
-                    </TouchableOpacity>
+                    <View style={{flexDirection : 'row', flexWrap : 'wrap', justifyContent : 'center'}}>
+                    {temp[0]}
+                    {item.images.map((image)=>{
+                        return (<ProductComp key={item.id} item={item} image={image.src}/>);
+                        })}
+                    </View>
+                    <View>
+                        <TouchableOpacity onPress={handlePageChange} style={{alignItems : 'center', paddingVertical : 10, backgroundColor : 'red', marginBottom : 5}}>
+                            <Text style={{color : 'white'}}>Load More</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                
             )
         }else{
             return(

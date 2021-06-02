@@ -33,6 +33,7 @@ const AddAddress = ({Parent, addShipping}) => {
                 address_1,
                 address_2,
                 city,
+                postcode : pincode,
                 pincode,
                 state,
                 country,

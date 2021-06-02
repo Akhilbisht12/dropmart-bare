@@ -56,8 +56,8 @@ const Earnings = ({navigation, profile}) => {
                         </View>
                         <View style={styles.summary}>
                             <View style={styles.detailCont}>
-                                <Text style={[styles.highTxt,{borderBottomWidth : 1, borderColor : 'lightgray', paddingBottom : 10, marginBottom : 10}]}>Next Payment Release Date : May 15</Text>
-                                <Text>see details of your earnings in this payment cycle.</Text>
+                                <Text style={[styles.highTxt,{borderBottomWidth : 1, borderColor : 'lightgray', paddingBottom : 10, marginBottom : 10}]}>Pending Payment</Text>
+                                <Text>Pending payments are released on weekly payout cycle.</Text>
                                 <Text style={[styles.highTxt,{color : '#c60607', marginVertical : 10, fontSize : 20}]}>{data.pending_payment}</Text>
                             </View>
                             <View style={styles.detailCont}>

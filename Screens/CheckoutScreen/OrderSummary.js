@@ -25,7 +25,9 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
     const [giftMessage, setGiftMessage] = useState('')
     const [coupon, setCoupon] = useState('')
     const [off, setOff] = useState(0)
-    let today = new Date().toISOString().slice(0, 10).split('-')
+    // let today = new Date().toISOString().slice(0, 10).split('-')
+    var ms = new Date().getTime() + 7*86400000;
+    var today = new Date(ms).toISOString().slice(0,10)
     useEffect(()=>{
 
         let price = 0;
@@ -78,9 +80,9 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
             list.push({product_id : item.id,quantity : item.qty});
         })
         if(isGift){
-            fee_lines = [{name : 'User Earned Margin',total : `${margin-productTotal}`},{name : 'Gift Pack Charges', total : '75'}]
+            fee_lines = [{name : 'User Earned Margin',total : `${margin-subTotal}`},{name : 'Gift Pack Charges', total : '75'}]
         }else {
-            fee_lines = [{name : 'User Earned Margin',total : `${margin-productTotal}`}]
+            fee_lines = [{name : 'User Earned Margin',total : `${margin-subTotal}`}]
         }
 
         if(productTotal<=199){
@@ -203,7 +205,7 @@ const OrderSummary = ({cart, billing, route, shipping, profile, navigation, empt
                     </View>
                     <View style={[styles.colorCont]}>
                         <Text style={{textAlign : 'center'}}>Estimated Delivery by</Text>
-                        <Text  style={[styles.fontBd,{textAlign : 'center'}]}>{today[0] + '-' +today[1]+ '-'+(parseInt(today[2])+7)}</Text>
+                        <Text  style={[styles.fontBd,{textAlign : 'center'}]}>{today}</Text>
                     </View>
                     {/* apply gift wrap section */}
                     <View style={[styles.colorCont]}>

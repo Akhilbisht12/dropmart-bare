@@ -89,8 +89,8 @@ const Address = ({shipping, route, navigation, deleteShipping}) => {
                                 <View key={item.address_1+Math.floor(Math.random()*100)} style={styles.addList}>
                                     <TouchableOpacity onPress={()=>setBilling(i)}>
                                         <Text style={styles.username}>{item.first_name + ' ' + item.last_name}</Text>
-                                        <Text style={styles.subText}>{item.address_1 + ' ' + item.address_2 + ' ' + item.city + ' ' + item.state + ' ' + item.pincode + ' ' + item.country}</Text>
-                                        <Text style={styles.subText}>+91 {item.phone}</Text>
+                                        <Text style={styles.subText}>{item.address_1 + ' ' + item.address_2 + ' ' + item.city + ' ' + item.state + ' ' + item.postcode + ' ' + item.country}</Text>
+                                        <Text style={styles.subText}>+91 {item.company}</Text>
                                     </TouchableOpacity>
                                     <View style={[styles.btnView,{justifyContent : 'flex-start'}]}>
                                         <TouchableOpacity onPress={()=>navigation.navigate('EditBilling', {index : i})} style={[styles.btn,{backgroundColor : '#c60607', marginHorizontal : 5}]}>

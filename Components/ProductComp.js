@@ -27,7 +27,8 @@ const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFr
         price : item.price,
         id : item.id,
         regular_price : item.regular_price,
-        sale_price : item.sale_price
+        sale_price : item.sale_price,
+        stock_status : item.stock_status
     }
 
     useEffect(()=>{
@@ -184,7 +185,13 @@ const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFr
                             </View>
                         </View>
                         </View>
-                    <View style={styles.purchase}>
+                        {item.stock_status ==="outofstock"?
+                        <View>
+                            <TouchableOpacity style={{borderWidth : 1, borderRadius : 5, paddingVertical : 5, borderColor : '#c60607', marginVertical : 4}}>
+                                <Text style={{textAlign : 'center', color : '#c60607', fontWeight : 'bold'}}>Out Of Stock</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :<View style={styles.purchase}>
                         <TouchableOpacity style={styles.shareBtn} onPress={()=>share()}>
                             <Text style={{fontSize : 20, color : 'white'}}>Share</Text>
                             <Icon color='white' style={{marginHorizontal : 5}} size={20} name='whatsapp'/>
@@ -195,7 +202,8 @@ const ProductComp  = ({item, image, addToCart, addToWishlist, wishlist, removeFr
                         }}>
                             <Ionicon style={styles.icon} size={15} name='cart'/>
                         </TouchableOpacity>
-                    </View>
+                        </View>}
+                    
                 </View>
                 
             </View>
