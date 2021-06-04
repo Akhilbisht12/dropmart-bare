@@ -33,8 +33,10 @@ export default function ProductShow() {
             <View style={{flexWrap : 'wrap', flexDirection : 'row', justifyContent : 'center'}}>
                 {data.map((item)=> {
                     if(item){
-                        return(item.images.map((image)=>{
+                        return(item.images.map((image,i)=>{
+                            if(i==0){
                         return(<ProductComp key={item.id} item={item} image={image.src}/>);
+                            }
                     }))}
                 })}
             </View>

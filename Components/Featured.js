@@ -30,8 +30,10 @@ const Featured = () => {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {data.map((item)=> {
                     if(item){
-                        return(item.images.map((image)=>{
-                        return(<ProductComp key={item.id} item={item} image={image.src}/>);
+                        return(item.images.map((image,i)=>{
+                        if(i==0){
+                            return(<ProductComp key={item.id} item={item} image={image.src}/>);
+                        }
                     }))}
                 })}
             </ScrollView>
